@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore our diverse range of programs for all ages. Find community events, workshops, and activities for juniors, teens, adults, and families.">
+    <title>Program List - Community Events and Activities</title>
+    <style>
+        /* Basic styles for layout and responsiveness */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        /* Styles for category filters */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 1px;
+        }
+        .category-filter {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            border: none;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1px;
+            padding: 0 15px;
+            border-radius: 0; /* Make buttons rectangular */
+        }
+        .category-filter.active {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .category-filter .triangle-container {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 10px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, bottom 0.3s ease;
+            pointer-events: none;
+        }
+        .category-filter.active .triangle-container {
+            opacity: 1;
+            bottom: -10px;
+        }
+        .category-filter .triangle-container svg {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            transition: bottom 200ms;
+        }
+        .category-filter .triangle-container svg .triangle {
+            fill: currentColor;
+            stroke: rgba(0, 0, 0, 0.3);
+            stroke-width: 1;
+        }
+        .category-filter:hover {
+            opacity: 0.9;
+        }
+        /* Unique colors for each category */
+        .all-programs { background-color: #007bff; color: white; }
+        .fc-junior { background-color: #28a745; color: white; }
+        .fc-teens { background-color: #ffc107; color: #333; }
+        .fc-adult { background-color: #dc3545; color: white; }
+        .parents { background-color: #6610f2; color: white; }
+        .families { background-color: #fd7e14; color: white; }
+        .community { background-color: #20c997; color: white; }
+        .friendmaker { background-color: #e83e8c; color: white; }
+        /* Styles for age dropdown */
+        .age-filter {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .age-filter label {
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        .age-filter select {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 0;
+            background-color: white;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%23007bff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            padding-right: 30px;
+        }
+        .age-filter select:hover, .age-filter select:focus {
+            background-color: #f0f8ff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+        }
+        /* Styles for program list */
+        .program-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .program-card {
+            flex: 1 1 calc(50% - 15px);
+            min-width: 300px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .program-categories {
+            display: flex;
+            height: 4px;
+            color: #fff;
+            padding: 0;
+            transition: height 0.3s ease, opacity 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 1;
+        }
+        .program-categories div {
+            height: 100%;
+            width: 100%;
+            line-height: 24px;
+            padding: 0 7px;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 10px;
+            text-align: center;
+            word-break: break-word;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(-100%);
+        }
+        .program-card.expanded .program-categories {
+            height: 24px;
+        }
+        .program-card.expanded .program-categories div {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .program-image {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            margin-bottom: 15px;
+        }
+        .program-content {
+            padding: 20px;
+        }
+        .program-content h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #333;
+        }
+        .program-date {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .view-more {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+            background-color: #ffffff;
+            border: 2px solid #007bff;
+            padding: 10px 15px;
+            font: inherit;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 0;
+        }
+        .view-more:after {
+            content: '→';
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        .view-more:hover:after {
+            transform: translateX(5px);
+        }
+        .view-more:hover, .view-more:focus {
+            color: #ffffff;
+            background-color: #007bff;
+            outline: none;
+        }
+        .program-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
+            opacity: 0;
+            padding: 0 20px;
+            display: none;
+        }
+        .program-card.expanded .program-details {
+            max-height: 1000px;
+            opacity: 1;
+            padding: 20px;
+            display: block;
+        }
+        .category-indicator {
+            display: inline-block;
+            padding: 2px 6px;
+            margin: 2px;
+            font-size: 12px;
+            color: white;
+            font-weight: 600;
+        }
+        .register-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+        }
+        .register-button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .future-dates {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #6c757d;
+        }
+        /* Responsive design */
+        @media (max-width: 700px) {
+            .program-card {
+                flex: 1 1 100%;
+                width: 100%;
+            }
+            .category-filter {
+                font-size: 14px;
+            }
+            .age-filter select {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 style="font-size: 42px; color: #007bff; text-align: center; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Community Programs</h1>
+        </header>
+
+        <nav class="category-filters">
+            <div class="category-filter all-programs active" data-category="all">
+                All Programs
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#007bff"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#007bff"></rect>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-filter fc-junior" data-category="fc-junior">
+                FC Junior
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#28a745"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#28a745"></rect>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-filter fc-teens" data-category="fc-teens">
+                FC Teens
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#ffc107"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#ffc107"></rect>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-filter fc-adult" data-category="fc-adult">
+                FC Adult
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#dc3545"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#dc3545"></rect>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-filter parents" data-category="parents">
+                Parents
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#6610f2"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#6610f2"></rect>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-filter families" data-category="families">
+                Families
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#fd7e14"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#fd7e14"></rect>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-filter community" data-category="community">
+                Community
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#20c997"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#20c997"></rect>
+                    </svg>
+                </div>
+            </div>
+            <div class="category-filter friendmaker" data-category="friendmaker">
+                Friendmaker
+                <div class="triangle-container">
+                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#e83e8c"></polygon>
+                        <rect x="0" y="0" width="20" height="1" class="square" fill="#e83e8c"></rect>
+                    </svg>
+                </div>
+            </div>
+        </nav>
+
+        <div class="age-filter">
+            <label for="age-select">Age Group:</label>
+            <select id="age-select">
+                <option value="">All Ages</option>
+                <option value="3-4">3-4 years</option>
+                <option value="5-12">5-12 years</option>
+                <option value="13-18">13-18 years</option>
+                <option value="18+">18+ years</option>
+            </select>
+        </div>
+
+        <main class="program-list">
+            <!-- Program card template -->
+            <div class="program-card" data-categories="fc-junior,community">
+                <div class="card-border"></div>
+                <div class="program-categories">
+                    <div class="category-indicator fc-junior">FC JUNIOR</div>
+                    <div class="category-indicator community">COMMUNITY</div>
+                </div>
+                <div class="program-image">
+                    <!-- Enhanced SVG placeholder -->
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#28a745;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#20c997;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grad1)"/>
+                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">FC Junior Community</text>
+                    </svg>
+                </div>
+                <div class="program-content">
+                    <p class="next-date">Next Date: <span>June 15, 2023</span></p>
+                    <p>Engaging activities for young community members.</p>
+                    <a href="#" class="view-more">View more details »</a>
+                    <div class="program-details">
+                        <p>Join us for fun-filled activities that promote community engagement among our youngest members.</p>
+                        <p><strong>Future Dates:</strong> July 20, 2023 | August 25, 2023 | September 30, 2023</p>
+                        <p><strong>Time:</strong> 2:00 PM - 4:00 PM</p>
+                        <p><strong>Location:</strong> Community Center, 123 Main St.</p>
+                        <hr>
+                        <br>
+                        <a href="#" class="full-details">View Full Event Details</a><br>
+                        <a href="#" class="register-button">REGISTER NOW</a>
+                    </div>
+                </div>
+            </div>
+            <div class="program-card" data-categories="fc-teens,friendmaker">
+                <div class="card-border"></div>
+                <div class="program-categories">
+                    <div class="category-indicator fc-teens">FC TEENS</div>
+                    <div class="category-indicator friendmaker">FRIENDMAKER</div>
+                </div>
+                <div class="program-image">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffc107;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#e83e8c;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grad2)"/>
+                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Teen Friendmaker</text>
+                    </svg>
+                </div>
+                <div class="program-content">
+                    <p class="next-date">Next Date: <span>July 2, 2023</span></p>
+                    <p>Build lasting friendships and social skills.</p>
+                    <a href="#" class="view-more">View more details »</a>
+                    <div class="program-details">
+                        <p>A workshop designed to help teens develop social skills and form meaningful connections with peers.</p>
+                        <p><strong>Future Dates:</strong> August 6, 2023 | September 3, 2023 | October 1, 2023</p>
+                        <p><strong>Time:</strong> 3:00 PM - 5:30 PM</p>
+                        <p><strong>Location:</strong> Youth Center, 456 Oak Ave.</p>
+                        <hr>
+                        <br>
+                        <a href="#" class="full-details">View Full Event Details</a><br>
+                        <a href="#" class="register-button">REGISTER NOW</a>
+                    </div>
+                </div>
+            </div>
+            <div class="program-card" data-categories="fc-adult,parents">
+                <div class="card-border"></div>
+                <div class="program-categories">
+                    <div class="category-indicator fc-adult">FC ADULT</div>
+                    <div class="category-indicator parents">PARENTS</div>
+                </div>
+                <div class="program-image">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#dc3545;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#6610f2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grad3)"/>
+                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Adult Parenting</text>
+                    </svg>
+                </div>
+                <div class="program-content">
+                    <p class="next-date">Next Date: <span>August 10, 2023</span></p>
+                    <p>Enhance your parenting skills and strategies.</p>
+                    <a href="#" class="view-more">View more details »</a>
+                    <div class="program-details">
+                        <p>Learn effective parenting techniques and share experiences with other parents in this informative seminar.</p>
+                        <p><strong>Future Dates:</strong> September 14, 2023 | October 12, 2023 | November 9, 2023</p>
+                        <p><strong>Time:</strong> 7:00 PM - 9:00 PM</p>
+                        <p><strong>Location:</strong> Community Library, 789 Elm St.</p>
+                        <hr>
+                        <br>
+                        <a href="#" class="full-details">View Full Event Details</a><br>
+                        <a href="#" class="register-button">REGISTER NOW</a>
+                    </div>
+                </div>
+            </div>
+            <div class="program-card" data-categories="families,community">
+                <div class="card-border"></div>
+                <div class="program-categories">
+                    <div class="category-indicator families">FAMILIES</div>
+                    <div class="category-indicator community">COMMUNITY</div>
+                </div>
+                <div class="program-image">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#fd7e14;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#20c997;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grad4)"/>
+                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Family Community</text>
+                    </svg>
+                </div>
+                <div class="program-content">
+                    <p class="next-date">Next Date: <span>September 5, 2023</span></p>
+                    <p>A day of fun and bonding for the whole family.</p>
+                    <a href="#" class="view-more">View more details »</a>
+                    <div class="program-details">
+                        <p>Join us for a day filled with activities that bring families together and strengthen our community bonds.</p>
+                        <p><strong>Future Dates:</strong> October 7, 2023 | November 4, 2023 | December 2, 2023</p>
+                        <p><strong>Time:</strong> 10:00 AM - 4:00 PM</p>
+                        <p><strong>Location:</strong> City Park, 321 Pine Rd.</p>
+                        <hr>
+                        <br>
+                        <a href="#" class="full-details">View Full Event Details</a><br>
+                        <a href="#" class="register-button">REGISTER NOW</a>
+                    </div>
+                </div>
+            </div>
+            <div class="program-card" data-categories="fc-junior,families">
+                <div class="card-border"></div>
+                <div class="program-categories">
+                    <div class="category-indicator fc-junior">FC JUNIOR</div>
+                    <div class="category-indicator families">FAMILIES</div>
+                </div>
+                <div class="program-image">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#28a745;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#fd7e14;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grad5)"/>
+                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Youth Sports League</text>
+                    </svg>
+                </div>
+                <div class="program-content">
+                    <p class="next-date">Next Date: <span>July 8, 2023</span></p>
+                    <p>Fun and competitive sports activities for young athletes and their families.</p>
+                    <a href="#" class="view-more">View more details »</a>
+                    <div class="program-details">
+                        <p>Join our Youth Sports League for exciting games, skill development, and family-friendly competition.</p>
+                        <p><strong>Future Dates:</strong> August 12, 2023 | September 9, 2023 | October 14, 2023</p>
+                        <p><strong>Time:</strong> 9:00 AM - 12:00 PM</p>
+                        <p><strong>Location:</strong> Community Sports Complex, 789 Field Ave.</p>
+                        <hr>
+                        <br>
+                        <a href="#" class="full-details">View Full Event Details</a><br>
+                        <a href="#" class="register-button">REGISTER NOW</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize category borders for each card
+            document.querySelectorAll('.program-card').forEach(initializeCategoryBorder);
+
+            // Add event listeners for view more buttons
+            document.querySelectorAll('.view-more').forEach(button => {
+                button.addEventListener('click', toggleProgramDetails);
+            });
+
+            // Add event listeners for category filters
+            document.querySelectorAll('.category-filter').forEach(filter => {
+                filter.addEventListener('click', toggleCategoryFilter);
+            });
+        });
+
+        function initializeCategoryBorder(card) {
+            const categories = card.querySelector('.program-categories');
+            const categoryIndicators = categories.querySelectorAll('.category-indicator');
+            const colors = Array.from(categoryIndicators).map(indicator => {
+                const className = indicator.classList[1];
+                return getComputedStyle(document.querySelector(`.category-filter.${className}`)).backgroundColor;
+            });
+
+            const gradientWidth = 100 / colors.length;
+            const gradientStops = colors.map((color, index) =>
+                `${color} ${index * gradientWidth}%, ${color} ${(index + 1) * gradientWidth}%`
+            ).join(', ');
+
+            const cardBorder = card.querySelector('.card-border');
+            cardBorder.style.background = `linear-gradient(to right, ${gradientStops})`;
+
+            // Store colors for later use when expanding
+            card.dataset.categoryColors = JSON.stringify(colors);
+        }
+
+        function toggleProgramDetails(e) {
+            e.preventDefault();
+            const card = this.closest('.program-card');
+            const programDetails = card.querySelector('.program-details');
+            const categories = card.querySelector('.program-categories');
+            const cardBorder = card.querySelector('.card-border');
+            const isExpanded = card.classList.contains('expanded');
+
+            // Toggle expanded state
+            card.classList.toggle('expanded', !isExpanded);
+
+            // Update button text with consistent capitalization and arrow
+            this.textContent = isExpanded ? 'View more details »' : 'View less «';
+
+            // Animate program details
+            programDetails.style.maxHeight = isExpanded ? '0' : `${programDetails.scrollHeight}px`;
+            programDetails.style.opacity = isExpanded ? '0' : '1';
+            programDetails.style.paddingTop = isExpanded ? '0' : '20px';
+            programDetails.style.paddingBottom = isExpanded ? '0' : '20px';
+
+            // Animate categories and card border
+            categories.style.height = isExpanded ? '4px' : '24px';
+            cardBorder.style.height = isExpanded ? '4px' : '24px';
+
+            // Animate category names
+            categories.querySelectorAll('div').forEach(div => {
+                div.style.opacity = isExpanded ? '0' : '1';
+                div.style.transform = isExpanded ? 'translateY(-100%)' : 'translateY(0)';
+            });
+
+            // Expand top border to show category names
+            const categoryColors = JSON.parse(card.dataset.categoryColors);
+            const gradientWidth = 100 / categoryColors.length;
+            const gradientStops = categoryColors.map((color, index) =>
+                `${color} ${index * gradientWidth}%, ${color} ${(index + 1) * gradientWidth}%`
+            ).join(', ');
+            cardBorder.style.background = `linear-gradient(to right, ${gradientStops})`;
+            cardBorder.style.opacity = isExpanded ? '0' : '1';
+            cardBorder.style.transform = isExpanded ? 'scaleY(0.25)' : 'scaleY(1)';
+            cardBorder.style.transformOrigin = 'top';
+
+            // Smooth scroll to the expanded card (only when expanding)
+            if (!isExpanded) {
+                setTimeout(() => {
+                    card.scrollIntoView({behavior: 'smooth', block: 'start'});
+                }, 300);
+            }
+
+            // Ensure smooth transitions
+            const transitionDuration = '300ms';
+            programDetails.style.transition = `max-height ${transitionDuration}, opacity ${transitionDuration}, padding ${transitionDuration}`;
+            categories.style.transition = `height ${transitionDuration}, opacity ${transitionDuration}`;
+            cardBorder.style.transition = `height ${transitionDuration}, background ${transitionDuration}, opacity ${transitionDuration}, transform ${transitionDuration}`;
+            categories.querySelectorAll('div').forEach(div => {
+                div.style.transition = `opacity ${transitionDuration}, transform ${transitionDuration}`;
+            });
+
+            // Update "View Full Event Details" link text
+            const fullDetailsLink = programDetails.querySelector('.full-details');
+            if (fullDetailsLink) {
+                fullDetailsLink.textContent = 'View Full Event Details';
+            }
+
+            // Update "Register Now" button text
+            const registerButton = programDetails.querySelector('.register-button');
+            if (registerButton) {
+                registerButton.textContent = 'REGISTER NOW';
+            }
+
+            // Trigger reflow to ensure smooth transition
+            card.offsetHeight;
+        }
+
+        function toggleCategoryFilter() {
+            document.querySelectorAll('.category-filter').forEach(f => {
+                f.classList.remove('active');
+                const arrow = f.querySelector('.triangle-container');
+                arrow.style.opacity = '0';
+                arrow.style.transform = 'translateY(10px)';
+            });
+            this.classList.add('active');
+
+            // Show arrow for active category
+            const arrow = this.querySelector('.triangle-container');
+            arrow.style.opacity = '1';
+            arrow.style.transform = 'translateY(0)';
+
+            // Smooth transition for arrow
+            arrow.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+
+            // Update arrow color to match category
+            const categoryColor = getComputedStyle(this).backgroundColor;
+            const categoryTextColor = getComputedStyle(this).color;
+            arrow.querySelector('.triangle').setAttribute('fill', categoryColor);
+            arrow.querySelector('.square').setAttribute('fill', categoryColor);
+            arrow.querySelector('.triangle').setAttribute('stroke', categoryTextColor);
+
+            // Ensure arrow is centered and positioned correctly
+            arrow.style.left = '50%';
+            arrow.style.bottom = '-10px';
+            arrow.style.transform = 'translateX(-50%)';
+
+            // Filter program cards based on selected category
+            const selectedCategory = this.getAttribute('data-category');
+            document.querySelectorAll('.program-card').forEach(card => {
+                if (selectedCategory === 'all' || card.getAttribute('data-categories').includes(selectedCategory)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
