@@ -1,700 +1,725 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore our diverse range of programs for all ages. Find community events, workshops, and activities for juniors, teens, adults, and families.">
-    <title>Program List - Community Events and Activities</title>
-    <style>
-        /* Basic styles for layout and responsiveness */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        /* Styles for category filters */
-        .category-filters {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 30px;
-            gap: 1px;
-        }
-        .category-filter {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            position: relative;
-            border: none;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1px;
-            padding: 0 15px;
-            border-radius: 0; /* Make buttons rectangular */
-        }
-        .category-filter.active {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .category-filter .triangle-container {
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 10px;
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease, bottom 0.3s ease;
-            pointer-events: none;
-        }
-        .category-filter.active .triangle-container {
-            opacity: 1;
-            bottom: -10px;
-        }
-        .category-filter .triangle-container svg {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            transition: bottom 200ms;
-        }
-        .category-filter .triangle-container svg .triangle {
-            fill: currentColor;
-            stroke: rgba(0, 0, 0, 0.3);
-            stroke-width: 1;
-        }
-        .category-filter:hover {
-            opacity: 0.9;
-        }
-        /* Unique colors for each category */
-        .all-programs { background-color: #007bff; color: white; }
-        .fc-junior { background-color: #28a745; color: white; }
-        .fc-teens { background-color: #ffc107; color: #333; }
-        .fc-adult { background-color: #dc3545; color: white; }
-        .parents { background-color: #6610f2; color: white; }
-        .families { background-color: #fd7e14; color: white; }
-        .community { background-color: #20c997; color: white; }
-        .friendmaker { background-color: #e83e8c; color: white; }
-        /* Styles for age dropdown */
-        .age-filter {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .age-filter label {
-            font-weight: bold;
-            margin-right: 15px;
-            font-size: 18px;
-        }
-        .age-filter select {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: 2px solid #007bff;
-            border-radius: 0;
-            background-color: white;
-            color: #007bff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg fill='%23007bff' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 10px top 50%;
-            padding-right: 30px;
-        }
-        .age-filter select:hover, .age-filter select:focus {
-            background-color: #f0f8ff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
-        }
-        /* Styles for program list */
-        .program-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-        .program-card {
-            flex: 1 1 calc(50% - 15px);
-            min-width: 300px;
-            margin-bottom: 30px;
-            border: 1px solid #e9ecef;
-            padding: 0;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .program-categories {
-            display: flex;
-            height: 4px;
-            color: #fff;
-            padding: 0;
-            transition: height 0.3s ease, opacity 0.3s ease;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            opacity: 1;
-        }
-        .program-categories div {
-            height: 100%;
-            width: 100%;
-            line-height: 24px;
-            padding: 0 7px;
-            text-transform: uppercase;
-            font-weight: bold;
-            font-size: 10px;
-            text-align: center;
-            word-break: break-word;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform: translateY(-100%);
-        }
-        .program-card.expanded .program-categories {
-            height: 24px;
-        }
-        .program-card.expanded .program-categories div {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .program-image {
-            width: 100%;
-            height: 200px;
-            background-color: #f0f0f0;
-            margin-bottom: 15px;
-        }
-        .program-content {
-            padding: 20px;
-        }
-        .program-content h2 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 24px;
-            color: #333;
-        }
-        .program-date {
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        .view-more {
-            color: #007bff;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 600;
-            background-color: #ffffff;
-            border: 2px solid #007bff;
-            padding: 10px 15px;
-            font: inherit;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            border-radius: 0;
-        }
-        .view-more:after {
-            content: '→';
-            margin-left: 5px;
-            transition: transform 0.3s ease;
-        }
-        .view-more:hover:after {
-            transform: translateX(5px);
-        }
-        .view-more:hover, .view-more:focus {
-            color: #ffffff;
-            background-color: #007bff;
-            outline: none;
-        }
-        .program-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
-            opacity: 0;
-            padding: 0 20px;
-            display: none;
-        }
-        .program-card.expanded .program-details {
-            max-height: 1000px;
-            opacity: 1;
-            padding: 20px;
-            display: block;
-        }
-        .category-indicator {
-            display: inline-block;
-            padding: 2px 6px;
-            margin: 2px;
-            font-size: 12px;
-            color: white;
-            font-weight: 600;
-        }
-        .register-button {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 12px 24px;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-        }
-        .register-button:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .future-dates {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #6c757d;
-        }
-        /* Responsive design */
-        @media (max-width: 700px) {
-            .program-card {
-                flex: 1 1 100%;
-                width: 100%;
-            }
-            .category-filter {
-                font-size: 14px;
-            }
-            .age-filter select {
-                padding: 8px 16px;
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1 style="font-size: 42px; color: #007bff; text-align: center; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Community Programs</h1>
-        </header>
+<link rel="Stylesheet" href="https://www.friendscleveland.com/css/fonts/font-awesome/font-awesome-5.css?v=98662BF4" id="kfont-awesome" type="text/css">
+<link rel="stylesheet" href="style.css" />
 
-        <nav class="category-filters">
-            <div class="category-filter all-programs active" data-category="all">
-                All Programs
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#007bff"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#007bff"></rect>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-filter fc-junior" data-category="fc-junior">
-                FC Junior
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#28a745"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#28a745"></rect>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-filter fc-teens" data-category="fc-teens">
-                FC Teens
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#ffc107"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#ffc107"></rect>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-filter fc-adult" data-category="fc-adult">
-                FC Adult
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#dc3545"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#dc3545"></rect>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-filter parents" data-category="parents">
-                Parents
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#6610f2"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#6610f2"></rect>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-filter families" data-category="families">
-                Families
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#fd7e14"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#fd7e14"></rect>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-filter community" data-category="community">
-                Community
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#20c997"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#20c997"></rect>
-                    </svg>
-                </div>
-            </div>
-            <div class="category-filter friendmaker" data-category="friendmaker">
-                Friendmaker
-                <div class="triangle-container">
-                    <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                        <polygon points="10 20, 0 0, 20 0" class="triangle" fill="#e83e8c"></polygon>
-                        <rect x="0" y="0" width="20" height="1" class="square" fill="#e83e8c"></rect>
-                    </svg>
-                </div>
-            </div>
-        </nav>
 
-        <div class="age-filter">
-            <label for="age-select">Age Group:</label>
-            <select id="age-select">
-                <option value="">All Ages</option>
-                <option value="3-4">3-4 years</option>
-                <option value="5-12">5-12 years</option>
-                <option value="13-18">13-18 years</option>
-                <option value="18+">18+ years</option>
-            </select>
-        </div>
+<div class="container_wrap container_wrap_first main_color sidebar_right fullsize">
+	<div class="page-heading-container clearfix programs-category-filter">
+		<div class="container">
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="all" style="background-color: #333" href="/programs">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#333"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#333"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #333">All Programs</span>
+			</a>
 
-        <main class="program-list">
-            <!-- Program card template -->
-            <div class="program-card" data-categories="fc-junior,community">
-                <div class="card-border"></div>
-                <div class="program-categories">
-                    <div class="category-indicator fc-junior">FC JUNIOR</div>
-                    <div class="category-indicator community">COMMUNITY</div>
-                </div>
-                <div class="program-image">
-                    <!-- Enhanced SVG placeholder -->
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#28a745;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#20c997;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grad1)"/>
-                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">FC Junior Community</text>
-                    </svg>
-                </div>
-                <div class="program-content">
-                    <p class="next-date">Next Date: <span>June 15, 2023</span></p>
-                    <p>Engaging activities for young community members.</p>
-                    <a href="#" class="view-more">View more details »</a>
-                    <div class="program-details">
-                        <p>Join us for fun-filled activities that promote community engagement among our youngest members.</p>
-                        <p><strong>Future Dates:</strong> July 20, 2023 | August 25, 2023 | September 30, 2023</p>
-                        <p><strong>Time:</strong> 2:00 PM - 4:00 PM</p>
-                        <p><strong>Location:</strong> Community Center, 123 Main St.</p>
-                        <hr>
-                        <br>
-                        <a href="#" class="full-details">View Full Event Details</a><br>
-                        <a href="#" class="register-button">REGISTER NOW</a>
-                    </div>
-                </div>
-            </div>
-            <div class="program-card" data-categories="fc-teens,friendmaker">
-                <div class="card-border"></div>
-                <div class="program-categories">
-                    <div class="category-indicator fc-teens">FC TEENS</div>
-                    <div class="category-indicator friendmaker">FRIENDMAKER</div>
-                </div>
-                <div class="program-image">
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#ffc107;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#e83e8c;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grad2)"/>
-                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Teen Friendmaker</text>
-                    </svg>
-                </div>
-                <div class="program-content">
-                    <p class="next-date">Next Date: <span>July 2, 2023</span></p>
-                    <p>Build lasting friendships and social skills.</p>
-                    <a href="#" class="view-more">View more details »</a>
-                    <div class="program-details">
-                        <p>A workshop designed to help teens develop social skills and form meaningful connections with peers.</p>
-                        <p><strong>Future Dates:</strong> August 6, 2023 | September 3, 2023 | October 1, 2023</p>
-                        <p><strong>Time:</strong> 3:00 PM - 5:30 PM</p>
-                        <p><strong>Location:</strong> Youth Center, 456 Oak Ave.</p>
-                        <hr>
-                        <br>
-                        <a href="#" class="full-details">View Full Event Details</a><br>
-                        <a href="#" class="register-button">REGISTER NOW</a>
-                    </div>
-                </div>
-            </div>
-            <div class="program-card" data-categories="fc-adult,parents">
-                <div class="card-border"></div>
-                <div class="program-categories">
-                    <div class="category-indicator fc-adult">FC ADULT</div>
-                    <div class="category-indicator parents">PARENTS</div>
-                </div>
-                <div class="program-image">
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#dc3545;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#6610f2;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grad3)"/>
-                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Adult Parenting</text>
-                    </svg>
-                </div>
-                <div class="program-content">
-                    <p class="next-date">Next Date: <span>August 10, 2023</span></p>
-                    <p>Enhance your parenting skills and strategies.</p>
-                    <a href="#" class="view-more">View more details »</a>
-                    <div class="program-details">
-                        <p>Learn effective parenting techniques and share experiences with other parents in this informative seminar.</p>
-                        <p><strong>Future Dates:</strong> September 14, 2023 | October 12, 2023 | November 9, 2023</p>
-                        <p><strong>Time:</strong> 7:00 PM - 9:00 PM</p>
-                        <p><strong>Location:</strong> Community Library, 789 Elm St.</p>
-                        <hr>
-                        <br>
-                        <a href="#" class="full-details">View Full Event Details</a><br>
-                        <a href="#" class="register-button">REGISTER NOW</a>
-                    </div>
-                </div>
-            </div>
-            <div class="program-card" data-categories="families,community">
-                <div class="card-border"></div>
-                <div class="program-categories">
-                    <div class="category-indicator families">FAMILIES</div>
-                    <div class="category-indicator community">COMMUNITY</div>
-                </div>
-                <div class="program-image">
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#fd7e14;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#20c997;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grad4)"/>
-                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Family Community</text>
-                    </svg>
-                </div>
-                <div class="program-content">
-                    <p class="next-date">Next Date: <span>September 5, 2023</span></p>
-                    <p>A day of fun and bonding for the whole family.</p>
-                    <a href="#" class="view-more">View more details »</a>
-                    <div class="program-details">
-                        <p>Join us for a day filled with activities that bring families together and strengthen our community bonds.</p>
-                        <p><strong>Future Dates:</strong> October 7, 2023 | November 4, 2023 | December 2, 2023</p>
-                        <p><strong>Time:</strong> 10:00 AM - 4:00 PM</p>
-                        <p><strong>Location:</strong> City Park, 321 Pine Rd.</p>
-                        <hr>
-                        <br>
-                        <a href="#" class="full-details">View Full Event Details</a><br>
-                        <a href="#" class="register-button">REGISTER NOW</a>
-                    </div>
-                </div>
-            </div>
-            <div class="program-card" data-categories="fc-junior,families">
-                <div class="card-border"></div>
-                <div class="program-categories">
-                    <div class="category-indicator fc-junior">FC JUNIOR</div>
-                    <div class="category-indicator families">FAMILIES</div>
-                </div>
-                <div class="program-image">
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#28a745;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#fd7e14;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grad5)"/>
-                        <text x="50%" y="50%" font-family="Arial" font-size="16" fill="#fff" dominant-baseline="middle" text-anchor="middle">Youth Sports League</text>
-                    </svg>
-                </div>
-                <div class="program-content">
-                    <p class="next-date">Next Date: <span>July 8, 2023</span></p>
-                    <p>Fun and competitive sports activities for young athletes and their families.</p>
-                    <a href="#" class="view-more">View more details »</a>
-                    <div class="program-details">
-                        <p>Join our Youth Sports League for exciting games, skill development, and family-friendly competition.</p>
-                        <p><strong>Future Dates:</strong> August 12, 2023 | September 9, 2023 | October 14, 2023</p>
-                        <p><strong>Time:</strong> 9:00 AM - 12:00 PM</p>
-                        <p><strong>Location:</strong> Community Sports Complex, 789 Field Ave.</p>
-                        <hr>
-                        <br>
-                        <a href="#" class="full-details">View Full Event Details</a><br>
-                        <a href="#" class="register-button">REGISTER NOW</a>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize category borders for each card
-            document.querySelectorAll('.program-card').forEach(initializeCategoryBorder);
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="jr" style="background-color: #c0d32b" href="/programs/fc-junior">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#C0D32B"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#C0D32B"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #c0d32b">FC Junior</span>
+			</a>
 
-            // Add event listeners for view more buttons
-            document.querySelectorAll('.view-more').forEach(button => {
-                button.addEventListener('click', toggleProgramDetails);
-            });
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="teens" style="background-color: #374e81" href="/programs/fc-teens">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#374e81"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#374e81"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #374e81">FC Teens</span>
+			</a>
 
-            // Add event listeners for category filters
-            document.querySelectorAll('.category-filter').forEach(filter => {
-                filter.addEventListener('click', toggleCategoryFilter);
-            });
-        });
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="adult" style="background-color: #705a5a" href="/programs/fc-adult">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#705a5a"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#705a5a"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #705a5a">FC Adult</span>
+			</a>
 
-        function initializeCategoryBorder(card) {
-            const categories = card.querySelector('.program-categories');
-            const categoryIndicators = categories.querySelectorAll('.category-indicator');
-            const colors = Array.from(categoryIndicators).map(indicator => {
-                const className = indicator.classList[1];
-                return getComputedStyle(document.querySelector(`.category-filter.${className}`)).backgroundColor;
-            });
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="parents" style="background-color: #8c2a90" href="/programs/parents">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#8c2a90"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#8c2a90"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #8c2a90">Parents</span>
+			</a>
 
-            const gradientWidth = 100 / colors.length;
-            const gradientStops = colors.map((color, index) =>
-                `${color} ${index * gradientWidth}%, ${color} ${(index + 1) * gradientWidth}%`
-            ).join(', ');
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="families" style="background-color: #fbb03f" href="/programs/families">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#fbb03f"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#fbb03f"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #fbb03f">Families</span>
+			</a>
 
-            const cardBorder = card.querySelector('.card-border');
-            cardBorder.style.background = `linear-gradient(to right, ${gradientStops})`;
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="community" style="background-color: #f0523e" href="/programs/community">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#f0523e"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#f0523e"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #f0523e">Community</span>
+			</a>
 
-            // Store colors for later use when expanding
-            card.dataset.categoryColors = JSON.stringify(colors);
-        }
+			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="friendmaker" style="background-color: #54a8a9" href="/programs/friendmaker">
+				<div class="triangle-container">
+					<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+						<polygon points="10 20, 0 0, 20 0" class="triangle" fill="#54a8a9"></polygon>
+						<rect x="0" y="0" width="20" height="1" class="square" fill="#54a8a9"></rect>
+					</svg>
+				</div>
+				<span style="background-color: #54a8a9">Friendmaker</span>
+			</a>
+		</div>
+	</div>
 
-        function toggleProgramDetails(e) {
-            e.preventDefault();
-            const card = this.closest('.program-card');
-            const programDetails = card.querySelector('.program-details');
-            const categories = card.querySelector('.program-categories');
-            const cardBorder = card.querySelector('.card-border');
-            const isExpanded = card.classList.contains('expanded');
+	<div class="program-filters">
+		<div class="container">
+			<div class="program-group-header">
+				<span class="js-program-group-header program-group-header-text">All Programs</span>
 
-            // Toggle expanded state
-            card.classList.toggle('expanded', !isExpanded);
+				<div class="program-group-dropdown">
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #333" data-filter-name="program_group" data-filter-value="all" href="/programs" data-wpel-link="internal"><span>All Programs</span></a>
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #c0d32b" data-filter-name="program_group" data-filter-value="jr" href="/programs/fc-junior" data-wpel-link="internal"><span>FC Junior</span></a>
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #374e81" data-filter-name="program_group" data-filter-value="teens" href="/programs/fc-teens" data-wpel-link="internal"><span>FC Teens</span></a>
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #705a5a" data-filter-name="program_group" data-filter-value="adult" href="/programs/fc-adult" data-wpel-link="internal"><span>FC Adult</span></a>
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #8c2a90" data-filter-name="program_group" data-filter-value="parents" href="/programs/parents" data-wpel-link="internal"><span>Parents</span></a>
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #fbb03f" data-filter-name="program_group" data-filter-value="families" href="/programs/families" data-wpel-link="internal"><span>Families</span></a>
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #f0523e" data-filter-name="program_group" data-filter-value="community" href="/programs/community" data-wpel-link="internal"><span>Community</span></a>
+					<a class="js-add-filter" data-filter-program-group="true" style="background: #54a8a9" data-filter-name="program_group" data-filter-value="friendmaker" href="/programs/friendmaker" data-wpel-link="internal"><span>Friendmaker</span></a>
+				</div>
+			</div>
+			<div id="programFilter" class="program-filter">
+				Filter by:
+				<div class="program-filter-group parent" data-filter-group-name="program_audience" data-display-for-group="" style="display: inline-block;">
+					<h2 class="fd-toggle"><i class="fa fa-users fd-toggle"></i> Ages</h2>
+					<span class="active-filters-display fd-toggle">all</span>
+					<div class="program-filter-options">
+						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="3-4" name="audience[]" value="3-4" /><span>Ages 3-4</span></label><label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="5-12" name="audience[]" value="5-12" /><span>Ages 5-12</span></label><label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="13-18" name="audience[]" value="13-18" /><span>Ages 13-18</span></label>
+						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="18+" name="audience[]" value="18+" /><span>Ages 18+</span></label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="program-active-filters-list js-active-filters-list"></div>
+		</div>
+	</div>
 
-            // Update button text with consistent capitalization and arrow
-            this.textContent = isExpanded ? 'View more details »' : 'View less «';
+	<div class="container template-blog">
+		<main id="programFilterResponse" class="content av-content-full fullsize" role="main" itemprop="mainContentOfPage" itemscope="itemscope" itemtype="https://schema.org/Blog">
+			<div class="programs-list-container">
+				<ul class="programs-list js-programs-filter-result" data-filter-program_group="all">
+					<li class="program active" data-filter="{'program_group':['friendmaker'],'program_audience':['5-12','13-18']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/volunteer-orientation/" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2022/06/5782-Program-web-header-VOL-orientation.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>Volunteer Orientation</h3>
 
-            // Animate program details
-            programDetails.style.maxHeight = isExpanded ? '0' : `${programDetails.scrollHeight}px`;
-            programDetails.style.opacity = isExpanded ? '0' : '1';
-            programDetails.style.paddingTop = isExpanded ? '0' : '20px';
-            programDetails.style.paddingBottom = isExpanded ? '0' : '20px';
+							<b>Next date:</b> Sunday, August 4
+							<a href="https://fcnj.com/program/volunteer-orientation/" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
 
-            // Animate categories and card border
-            categories.style.height = isExpanded ? '4px' : '24px';
-            cardBorder.style.height = isExpanded ? '4px' : '24px';
+							<div class="program-more-details">
+								<div class="excerpt">
+									<span class="show-for-volunteer-group">
+										<p><span data-sheets-value="{'1':2,'2':'Prior to volunteering, each teenage volunteer and a parent are required to attend a Volunteer Orientation. Orientation gives volunteers the opportunity to become familiar with the facility and to learn more about what to expect from volunteering at Friendship Circle programs.'}" data-sheets-userformat="{'2':1313725,'3':{'1':0},'5':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'6':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'7':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'8':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'10':0,'11':4,'12':0,'14':{'1':2,'2':0},'21':0,'23':1}">Prior to volunteering, each teenage volunteer and a parent are required to attend a Volunteer Orientation. Orientation gives volunteers the opportunity to become familiar with the facility and to learn more about what to expect from volunteering at Friendship Circle programs.</span></p>
+									</span>
+									<span class="hide-for-volunteer-group">
+										<div id="main-content">
+											<p><span data-sheets-value="{'1':2,'2':'Prior to volunteering, each teenage volunteer and a parent are required to attend a Volunteer Orientation. Orientation gives volunteers the opportunity to become familiar with the facility and to learn more about what to expect from volunteering at Friendship Circle programs.'}" data-sheets-userformat="{'2':1313725,'3':{'1':0},'5':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'6':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'7':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'8':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'10':0,'11':4,'12':0,'14':{'1':2,'2':0},'21':0,'23':1}">Prior to volunteering, each teenage volunteer and a parent are required to attend a Volunteer Orientation. Orientation gives volunteers the opportunity to become familiar with the facility and to learn more about what to expect from volunteering at Friendship Circle programs.</span></p>
+										</div>
+									</span>
+								</div>
 
-            // Animate category names
-            categories.querySelectorAll('div').forEach(div => {
-                div.style.opacity = isExpanded ? '0' : '1';
-                div.style.transform = isExpanded ? 'translateY(-100%)' : 'translateY(0)';
-            });
+								<div class="event-info">
+									<div>
+										<b><i class="fa fa-calendar" aria-hidden="true"></i></b>
+										<span><a href="#" onclick="jQuery(this).hide().closest('div').css('margin-bottom', '-25px').closest('.event-info').addClass('show_past_dates');return false;" style="font-size: 12px">Show past dates</a></span><br />
+									</div>
+									<div class="is_past_date remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Sunday, June 2</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Sunday, August 4</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>10:30am</span><br />
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>LifeTown, 10 Microlab Road, Livingston</span><br />
+								</div>
+								<a href="https://fcnj.com/program/volunteer-orientation/" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
 
-            // Expand top border to show category names
-            const categoryColors = JSON.parse(card.dataset.categoryColors);
-            const gradientWidth = 100 / categoryColors.length;
-            const gradientStops = categoryColors.map((color, index) =>
-                `${color} ${index * gradientWidth}%, ${color} ${(index + 1) * gradientWidth}%`
-            ).join(', ');
-            cardBorder.style.background = `linear-gradient(to right, ${gradientStops})`;
-            cardBorder.style.opacity = isExpanded ? '0' : '1';
-            cardBorder.style.transform = isExpanded ? 'scaleY(0.25)' : 'scaleY(1)';
-            cardBorder.style.transformOrigin = 'top';
+					<li class="program active" data-filter="{'program_group':['jr','friendmaker'],'program_audience':['3-4']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #c0d32b"><span>FC Junior</span></div>
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/family-fun-sundays" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2022/08/5783-Program-web-header-FAMILY-FUN-0-10.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>Family Fun Sundays</h3>
 
-            // Smooth scroll to the expanded card (only when expanding)
-            if (!isExpanded) {
-                setTimeout(() => {
-                    card.scrollIntoView({behavior: 'smooth', block: 'start'});
-                }, 300);
-            }
+							<b>Next date:</b> Sunday, August 4
+							<a href="https://fcnj.com/program/family-fun-sundays" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
 
-            // Ensure smooth transitions
-            const transitionDuration = '300ms';
-            programDetails.style.transition = `max-height ${transitionDuration}, opacity ${transitionDuration}, padding ${transitionDuration}`;
-            categories.style.transition = `height ${transitionDuration}, opacity ${transitionDuration}`;
-            cardBorder.style.transition = `height ${transitionDuration}, background ${transitionDuration}, opacity ${transitionDuration}, transform ${transitionDuration}`;
-            categories.querySelectorAll('div').forEach(div => {
-                div.style.transition = `opacity ${transitionDuration}, transform ${transitionDuration}`;
-            });
+							<div class="program-more-details">
+								<div class="excerpt">
+									<span class="show-for-volunteer-group">
+										<p>Volunteers will be available to assist participants and their families with activities throughout LifeTown (gym, art, sensory room, etc.)</p>
+									</span>
+									<span class="hide-for-volunteer-group">
+										<div id="main-content">
+											<p style="margin: 0in; margin-bottom: 0.0001pt"><span data-sheets-value="{'1':2,'2':'Fun for the whole family! Play in the gym, experience the sand room and sensory rooms, explore the playground, or create in the art room. *Please note that the LifeTown Shoppes are NOT included. Parents/guardians must remain with their children at all times. Ages 1-15'}" data-sheets-userformat="{'2':3071,'3':{'1':0},'4':{'1':2,'2':16777215},'5':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'6':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'7':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'8':{'1':[{'1':2,'2':0,'5':{'1':2,'2':0}},{'1':0,'2':0,'3':3},{'1':1,'2':0,'4':1}]},'9':1,'10':1,'11':4,'12':0,'14':{'1':3,'3':1}}">Fun for the whole family! Play in the gym, experience the sand room and sensory rooms, explore the playground, or create in the art room. *Please note that the LifeTown Shoppes are NOT included. Parents/guardians must remain with their children at all times. Ages 0-10</span></p>
+										</div>
+									</span>
+								</div>
 
-            // Update "View Full Event Details" link text
-            const fullDetailsLink = programDetails.querySelector('.full-details');
-            if (fullDetailsLink) {
-                fullDetailsLink.textContent = 'View Full Event Details';
-            }
+								<div class="event-info">
+									<div>
+										<b><i class="fa fa-calendar" aria-hidden="true"></i></b>
+										<span><a href="#" onclick="jQuery(this).hide().closest('div').css('margin-bottom', '-25px').closest('.event-info').addClass('show_past_dates');return false;" style="font-size: 12px">Show past dates</a></span><br />
+									</div>
+									<div class="is_past_date remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Sunday, July 21</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Sunday, August 4</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>10:00 am to 12:00 pm</span><br />
+									<a class="button" href="https://www.lifetown.com/familyfun" target="" title="Register" data-wpel-link="exclude"> Register </a><br />
+								</div>
+								<a href="https://fcnj.com/program/family-fun-sundays" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
 
-            // Update "Register Now" button text
-            const registerButton = programDetails.querySelector('.register-button');
-            if (registerButton) {
-                registerButton.textContent = 'REGISTER NOW';
-            }
+					<li class="program active" data-filter="{'program_group':['jr','teens','friendmaker'],'program_audience':['3-4','5-12']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #c0d32b"><span>FC Junior</span></div>
+							<div style="background-color: #374e81"><span>FC Teens</span></div>
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/fcsummercampweek2" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2023/01/5783-Program-web-header-summer-camp.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>FC Summer Camp Week #2</h3>
 
-            // Trigger reflow to ensure smooth transition
-            card.offsetHeight;
-        }
+							<b>Next date:</b> Monday, August 5
+							<a href="https://fcnj.com/program/fcsummercampweek2" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
 
-        function toggleCategoryFilter() {
-            document.querySelectorAll('.category-filter').forEach(f => {
-                f.classList.remove('active');
-                const arrow = f.querySelector('.triangle-container');
-                arrow.style.opacity = '0';
-                arrow.style.transform = 'translateY(10px)';
-            });
-            this.classList.add('active');
+							<div class="program-more-details">
+								<div class="excerpt">
+									<p>A fun-filled Jewish camp experience that will transform your summer! Enjoy a variety of activities at Lifetown, including sports, crafts and swimming.</p>
+								</div>
 
-            // Show arrow for active category
-            const arrow = this.querySelector('.triangle-container');
-            arrow.style.opacity = '1';
-            arrow.style.transform = 'translateY(0)';
+								<div class="event-info">
+									<div class="">
+										<b>
+											<i class="fa fa-star" aria-hidden="true"></i>
+										</b>
+										<span><strong>Week #2</strong></span><br />
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Monday, August 5</span><br />
+									</div>
 
-            // Smooth transition for arrow
-            arrow.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Tuesday, August 6</span><br />
+									</div>
 
-            // Update arrow color to match category
-            const categoryColor = getComputedStyle(this).backgroundColor;
-            const categoryTextColor = getComputedStyle(this).color;
-            arrow.querySelector('.triangle').setAttribute('fill', categoryColor);
-            arrow.querySelector('.square').setAttribute('fill', categoryColor);
-            arrow.querySelector('.triangle').setAttribute('stroke', categoryTextColor);
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Wednesday, August 7</span><br />
+									</div>
 
-            // Ensure arrow is centered and positioned correctly
-            arrow.style.left = '50%';
-            arrow.style.bottom = '-10px';
-            arrow.style.transform = 'translateX(-50%)';
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Thursday, August 8</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>Mon-Thurs; 9:30am-3:00pm</span><br />
+									<div style="display: none" class="show-for-volunteer-group remove-top-margin">
+										<b><i class="fa" aria-hidden="true"></i></b> <span>Volunteers: Mon-Thurs; 9:30am-3:00pm </span><br />
+									</div>
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>Friendship Circle, 10 Microlab Road, Livingston</span><br />
+									<span style="display: none" class="show-for-volunteer-group">
+										<b><i class="fa fa-star" aria-hidden="true"></i></b>
+										<span>600 Full Day Friendship Points per day</span><br />
+									</span>
+									<a class="button" href="https://fcnj.com/register/programs" target="" title="Register " data-wpel-link="internal"> Register </a><br />
+								</div>
+								<a href="https://fcnj.com/program/fcsummercampweek2" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
 
-            // Filter program cards based on selected category
-            const selectedCategory = this.getAttribute('data-category');
-            document.querySelectorAll('.program-card').forEach(card => {
-                if (selectedCategory === 'all' || card.getAttribute('data-categories').includes(selectedCategory)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+					<li class="program active" data-filter="{'program_group':['community','family','jr','teens','fc-adult','parents','friendmaker'],'program_audience':['3-4','5-12','13-18']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #f0523e"><span>Community</span></div>
+							<div style="background-color: #fbb03f"><span>families</span></div>
+							<div style="background-color: #c0d32b"><span>FC Junior</span></div>
+							<div style="background-color: #374e81"><span>FC Teens</span></div>
+							<div style="background-color: #705a5a"><span>FC Adult</span></div>
+							<div style="background-color: #8c2a90"><span>Parents</span></div>
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/shabbat-dinner/" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2021/10/5783-Program-web-headers-Fab-friday-night.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>Fabulous Friday Night</h3>
+
+							<b>Next date:</b> Friday, August 9
+							<a href="https://fcnj.com/program/shabbat-dinner/" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
+
+							<div class="program-more-details">
+								<div class="excerpt">
+									<p>Delicious food, great company, warm atmosphere, Shabbat spirit</p>
+								</div>
+
+								<div class="event-info">
+									<div>
+										<b><i class="fa fa-calendar" aria-hidden="true"></i></b>
+										<span><a href="#" onclick="jQuery(this).hide().closest('div').css('margin-bottom', '-25px').closest('.event-info').addClass('show_past_dates');return false;" style="font-size: 12px">Show past dates</a></span><br />
+									</div>
+									<div class="is_past_date remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Friday, June 28</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Friday, August 9</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>4:00pm</span><br />
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>LifeTown, 10 Microlab Road, Livingston</span><br />
+									<a class="button" href="/shabbatdinner" target="" title="RSVP" data-wpel-link="internal"> RSVP </a><br />
+								</div>
+								<a href="https://fcnj.com/program/shabbat-dinner/" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
+
+					<li class="program active" data-filter="{'program_group':['community','families','jr','teens','fc-adult','parents','friendmaker'],'program_audience':['3-4','5-12','13-18']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #f0523e"><span>Community</span></div>
+							<div style="background-color: #fbb03f"><span>families</span></div>
+							<div style="background-color: #c0d32b"><span>FC Junior</span></div>
+							<div style="background-color: #374e81"><span>FC Teens</span></div>
+							<div style="background-color: #705a5a"><span>FC Adult</span></div>
+							<div style="background-color: #8c2a90"><span>Parents</span></div>
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/carnival" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2022/08/5784-Program-web-header-lt-open-house.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>LifeTown Open House and Carnival</h3>
+
+							Sunday, August 11
+							<a href="https://fcnj.com/program/carnival" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
+
+							<div class="program-more-details">
+								<div class="excerpt">
+									<p>Petting Zoo Train Ride Playground and Gym Sand, Sensory and Art Rooms Refreshments Learn about programs for the upcoming year! &nbsp;</p>
+								</div>
+
+								<div class="event-info">
+									<div class="">
+										<b>
+											<i class="fa fa-calendar" aria-hidden="true"></i>
+										</b>
+										<span>Sunday, August 11</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>1:00pm-3:00pm</span><br />
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>LifeTown</span><br />
+									<a class="button" href="https://www.lifetown.com/openhouse/" target="" title="RSVP" data-wpel-link="exclude"> RSVP </a><br />
+								</div>
+								<a href="https://fcnj.com/program/carnival" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
+
+					<li class="program active" data-filter="{'program_group':['jr','teens','friendmaker'],'program_audience':['3-4','5-12']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #c0d32b"><span>FC Junior</span></div>
+							<div style="background-color: #374e81"><span>FC Teens</span></div>
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/fcsummercampweek3" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2023/01/5783-Program-web-header-summer-camp.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>FC Summer Camp Week #3</h3>
+
+							<b>Next date:</b> Monday, August 12
+							<a href="https://fcnj.com/program/fcsummercampweek3" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
+
+							<div class="program-more-details">
+								<div class="excerpt">
+									<p>A fun-filled Jewish camp experience that will transform your summer! Enjoy a variety of activities at Lifetown, including sports, crafts and swimming.</p>
+								</div>
+
+								<div class="event-info">
+									<div class="">
+										<b>
+											<i class="fa fa-star" aria-hidden="true"></i>
+										</b>
+										<span><strong>Week #3</strong></span><br />
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Monday, August 12 | 9:30am-3:00pm</span><br />
+									</div>
+
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Wednesday, August 14 | 9:30am-3:00pm</span><br />
+									</div>
+
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Thursday, August 15 | 9:30am-3:00pm</span><br />
+									</div>
+
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Friday, August 16 | 9:30am-2:00pm</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>Monday, Wednesday and Thursday: 9:30am-3:00pm, Friday 9:30am-2:00pm</span><br />
+									<div style="display: none" class="show-for-volunteer-group remove-top-margin">
+										<b><i class="fa" aria-hidden="true"></i></b> <span>Volunteers: Monday, Wednesday and Thursday: 9:30am-3:00pm, Friday 9:30am-2:00pm </span><br />
+									</div>
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>Friendship Circle, 10 Microlab Road, Livingston</span><br />
+									<span style="display: none" class="show-for-volunteer-group">
+										<b><i class="fa fa-star" aria-hidden="true"></i></b>
+										<span>600 Full Day Friendship Points per day</span><br />
+									</span>
+									<a class="button" href="https://fcnj.com/register/programs" target="" title="Register" data-wpel-link="internal"> Register </a><br />
+								</div>
+								<a href="https://fcnj.com/program/fcsummercampweek3" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
+
+					<li class="program active" data-filter="{'program_group':['fc-adult','friendmaker'],'program_audience':['13-18']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #705a5a"><span>FC Adult</span></div>
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/allies-summer-camp-ya" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2022/08/5783-Program-web-header-adult-summer.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>Allie’s Summer Camp 21+</h3>
+
+							<b>Next date:</b> Monday, August 19
+							<a href="https://fcnj.com/program/allies-summer-camp-ya" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
+
+							<div class="program-more-details">
+								<div class="excerpt">
+									<p>A fun-filled Jewish camp experience that will transform your summer! Enjoy a variety of activities at Lifetown, including sports, crafts and swimming.</p>
+								</div>
+
+								<div class="event-info">
+									<div class="">
+										<b>
+											<i class="fa fa-calendar" aria-hidden="true"></i>
+										</b>
+										<span>Monday, August 19</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Tuesday, August 20</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Wednesday, August 21</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Thursday, August 22</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>Monday-Thursday: 9:30am-3:00pm</span><br />
+									<div style="display: none" class="show-for-volunteer-group remove-top-margin">
+										<b><i class="fa" aria-hidden="true"></i></b> <span>Volunteers: Mon-Thurs; 9:15am-3:00pm </span><br />
+									</div>
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>Friendship Circle, 10 Microlab Road, Livingston</span><br />
+									<span style="display: none" class="show-for-volunteer-group">
+										<b><i class="fa fa-star" aria-hidden="true"></i></b>
+										<span>600 Full Day Friendship Points per day</span><br />
+									</span>
+									<a class="button" href="https://fcnj.com/register/programs" target="" title="Register " data-wpel-link="internal"> Register </a><br />
+								</div>
+								<a href="https://fcnj.com/program/allies-summer-camp-ya" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
+
+					<li class="program active" data-filter="{'program_group':['jr','teens','friendmaker'],'program_audience':['3-4','5-12']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #c0d32b"><span>FC Junior</span></div>
+							<div style="background-color: #374e81"><span>FC Teens</span></div>
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/allies-summer-camp-4/" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2017/11/alles-camp-kid-teen.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>Allies Summer Camp</h3>
+
+							<b>Next date:</b> Monday, August 19
+							<a href="https://fcnj.com/program/allies-summer-camp-4/" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
+
+							<div class="program-more-details">
+								<div class="excerpt">
+									<span class="show-for-volunteer-group">
+										<p>A fun-filled Jewish camp experience that will transform your summer!</p>
+										<p>Enjoy a variety of activities at Lifetown, including sports, crafts and swimming.</p>
+										<p>&nbsp;</p>
+									</span>
+									<span class="hide-for-volunteer-group">
+										<div id="main-content">
+											<p>A fun-filled Jewish camp experience that will transform your summer!</p>
+											<p>Enjoy a variety of activities at Lifetown, including sports, crafts and swimming.</p>
+										</div>
+									</span>
+								</div>
+
+								<div class="event-info">
+									<div class="">
+										<b>
+											<i class="fa fa-calendar" aria-hidden="true"></i>
+										</b>
+										<span>Monday, August 19</span><br />
+									</div>
+
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Tuesday, August 20</span><br />
+									</div>
+
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Wednesday, August 21</span><br />
+									</div>
+
+									<div class="">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Thursday, August 22</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>Monday-Thursday: 9:30am-3:00pm</span><br />
+									<div style="display: none" class="show-for-volunteer-group remove-top-margin">
+										<b><i class="fa" aria-hidden="true"></i></b> <span>Volunteers: Monday-Thursday: 9:15am-3:00pm, Friday: 9:30am-1:00pm </span><br />
+									</div>
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>Friendship Circle, 10 Microlab Road, Livingston</span><br />
+									<span style="display: none" class="show-for-volunteer-group">
+										<b><i class="fa fa-star" aria-hidden="true"></i></b>
+										<span>600 Full Day Friendship Points per day</span><br />
+									</span>
+									<a class="button" href="https://fcnj.com/register/programs" target="" title="Register" data-wpel-link="internal"> Register </a><br />
+								</div>
+								<a href="https://fcnj.com/program/allies-summer-camp-4/" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
+
+					<li class="program active" data-filter="{'program_group':['community','families','teens','fc-adult'],'program_audience':['3-4','5-12','13-18']}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #f0523e"><span>Community</span></div>
+							<div style="background-color: #fbb03f"><span>families</span></div>
+							<div style="background-color: #374e81"><span>FC Teens</span></div>
+							<div style="background-color: #705a5a"><span>FC Adult</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/lifetown-shoppes-experience/" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2023/10/5784-Program-web-header-LT-Shoppes-Experience.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>LifeTown Shoppes Experience</h3>
+
+							<b>Next date:</b> Friday, August 30
+							<a href="https://fcnj.com/program/lifetown-shoppes-experience/" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
+
+							<div class="program-more-details">
+								<div class="excerpt">
+									<p>LifeTown Shoppes is a simulated city where participants practice, master and reinforce life-skills, all in a supportive and encouraging environment.</p>
+								</div>
+
+								<div class="event-info">
+									<div>
+										<b><i class="fa fa-calendar" aria-hidden="true"></i></b>
+										<span><a href="#" onclick="jQuery(this).hide().closest('div').css('margin-bottom', '-25px').closest('.event-info').addClass('show_past_dates');return false;" style="font-size: 12px">Show past dates</a></span><br />
+									</div>
+									<div class="is_past_date remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Thursday, July 18</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Friday, August 30</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Tuesday, September 3</span><br />
+									</div>
+									<div class="remove-top-margin">
+										<b>
+											<i class="fa" aria-hidden="true"></i>
+										</b>
+										<span>Monday, October 14</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>10:00 am to 12:00 pm</span><br />
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>LifeTown, 10 Microlab Road, Livingston</span><br />
+									<a class="button" href="https://www.lifetown.com/shoppes" target="" title="Register" data-wpel-link="exclude"> Register </a><br />
+								</div>
+								<a href="https://fcnj.com/program/lifetown-shoppes-experience/" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
+
+					<li class="program active" data-filter="{'program_group':['friendmaker'],'program_audience':[]}">
+						<div class="program-categories program-more-details-open">
+							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
+						</div>
+						<div class="featured-image-container">
+							<a href="https://fcnj.com/program/volunteer-kick-off-event/" class="program-more-details-open" data-wpel-link="internal">
+								<div class="featured-image" style="background-image: url(https://fcnj.com/wp-content/uploads/2017/08/5783-Program-web-header-vol-kickoff.jpg)"></div>
+							</a>
+						</div>
+						<div class="program-details">
+							<h3>Volunteer Kick Off Event</h3>
+
+							Wednesday, September 4
+							<a href="https://fcnj.com/program/volunteer-kick-off-event/" class="program-more-details-open program-more-details-button" data-wpel-link="internal">View more details »</a>
+
+							<div class="program-more-details">
+								<div class="excerpt">
+									<span class="show-for-volunteer-group">
+										<p>Come and learn about Friendship Circle programs and sign up for the upcoming year.</p>
+										<p>Orientations – 5:00pm, 6:30pm</p>
+									</span>
+									<span class="hide-for-volunteer-group">
+										<div id="main-content">
+											<p>Come and learn about Friendship Circle programs and sign up for the upcoming year.</p>
+											<p>Orientations –</p>
+											<p>5:00pm</p>
+											<p>6:30pm</p>
+											<p>&nbsp;</p>
+										</div>
+									</span>
+								</div>
+
+								<div class="event-info">
+									<div class="">
+										<b>
+											<i class="fa fa-calendar" aria-hidden="true"></i>
+										</b>
+										<span>Wednesday, September 4</span><br />
+									</div>
+									<b><i class="fa fa-clock-o" aria-hidden="true"></i></b> <span>5:00</span><br />
+									<b><i class="fa fa-map-marker" aria-hidden="true"></i></b> <span>10 Microlab Rd, Livingston</span><br />
+									<span style="display: none" class="show-for-volunteer-group">
+										<b><i class="fa fa-star" aria-hidden="true"></i></b>
+										<span>200 Friendship Points per event</span><br />
+									</span>
+									<a class="button" href="https://fcnj.com/kickoff/" target="" title="RSVP" data-wpel-link="internal"> RSVP </a><br />
+								</div>
+								<a href="https://fcnj.com/program/volunteer-kick-off-event/" class="more-details" data-wpel-link="internal">View more details »</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+
+				<div class="js-no-programs-message no-program-matches">Oops, there are no programs that match your selected category/filters. Try changing the filters or selecting a different category.</div>
+			</div>
+
+			<!--end content-->
+		</main>
+	</div>
+	<!--end container-->
+</div>
