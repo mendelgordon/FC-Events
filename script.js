@@ -31,10 +31,19 @@ function handleFilterButtonClick(event) {
     const filterName = event.currentTarget.dataset.filterName;
     const filterValue = event.currentTarget.dataset.filterValue;
 
-    activeFilters[filterName] = filterValue;
-    updateActiveFilters();
-    applyFilters();
-    updateProgramGroupHeader(filterValue);
+    if (filterName === 'program_group') {
+        updateProgramGroupHeader(filterValue);
+        expandBottomArrow();
+    } else {
+        activeFilters[filterName] = filterValue;
+        updateActiveFilters();
+        applyFilters();
+    }
+}
+
+function expandBottomArrow() {
+    const programGroupDropdown = document.querySelector('.program-group-dropdown');
+    programGroupDropdown.classList.add('expanded');
 }
 
 function handleCheckboxFilterChange(event) {
@@ -73,12 +82,14 @@ function updateActiveFilters() {
     activeFiltersList.innerHTML = '';
 
     Object.entries(activeFilters).forEach(([filterName, filterValue]) => {
-        if (Array.isArray(filterValue)) {
-            filterValue.forEach(value => {
-                addActiveFilterTag(filterName, value);
-            });
-        } else if (filterValue !== 'all') {
-            addActiveFilterTag(filterName, filterValue);
+        if (filterName !== 'program_group') {
+            if (Array.isArray(filterValue)) {
+                filterValue.forEach(value => {
+                    addActiveFilterTag(filterName, value);
+                });
+            } else if (filterValue !== 'all') {
+                addActiveFilterTag(filterName, filterValue);
+            }
         }
     });
 }
@@ -120,6 +131,12 @@ function updateProgramGroupHeader(groupName) {
     };
 
     programGroupHeader.textContent = groupNames[groupName] || 'All Programs';
+
+    // Expand the bottom arrow
+    const programGroupDropdown = document.querySelector('.program-group-dropdown');
+    if (programGroupDropdown) {
+        programGroupDropdown.style.display = 'block';
+    }
 }
 
 function toggleProgramDetails(event) {
