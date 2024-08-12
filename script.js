@@ -1,4 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
+	// Format the date from the event text to a Date object
+	function parseDateString(dateString) {
+		const [dayOfWeek, month, day] = dateString.split(' ');
+		const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		const monthIndex = monthNames.indexOf(month);
+		const currentYear = new Date().getFullYear(); // Assume current year
+
+		return new Date(`${monthIndex + 1}/${day.replace(",", "")}/${currentYear}`);
+	}
+
+	// Check and mark past dates
+	function markPastDates() {
+		const now = new Date();
+		document.querySelectorAll('.program').forEach((program) => {
+			const dates = program.querySelectorAll('.remove-top-margin span');
+			let hasFutureDates = false;
+
+			dates.forEach((dateSpan) => {
+				const dateText = dateSpan.textContent.trim();
+				const parsedDate = parseDateString(dateText);
+
+				if (parsedDate < now) {
+					dateSpan.closest('.remove-top-margin').classList.add('is_past_date');
+				} else {
+					hasFutureDates = true;
+				}
+			});
+
+			if (!hasFutureDates) {
+				program.classList.remove('active');
+			}
+		});
+	}
+
 	// Function to reset active classes on all filter links and set the clicked one as active
 	function setActiveCategory(filterLink) {
 		document.querySelectorAll('.js-add-filter').forEach((el) => {
@@ -72,7 +106,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		activeFilters.forEach((filter) => {
 			const filterTag = document.createElement('span');
 			filterTag.classList.add('filter-tag');
-			filterTag.innerHTML = `${filter.nextElementSibling.textContent}&nbsp;
+			filterTag.innerHTML = `
+		  ${filter.nextElementSibling.textContent.trim()}&nbsp;
 		  <span data-filter-value="${filter.value}" data-filter-name="${filter.dataset.filterName}" class="filter-tag-remove js-filter-tag-remove">x</span>`;
 			activeFiltersContainer.appendChild(filterTag);
 		});
@@ -81,6 +116,17 @@ document.addEventListener('DOMContentLoaded', function () {
 		const activeFilterCount = activeFilters.length;
 		const filterHeader = document.querySelector('.active-filters-display');
 		filterHeader.textContent = activeFilterCount === 0 ? 'all' : `${activeFilterCount} filter${activeFilterCount > 1 ? 's' : ''}`;
+	}
+
+	// Function to hide filter options when clicking outside
+	function hideFilterOptionsOnClickOutside(event) {
+		const filterGroups = document.querySelectorAll('.program-filter-group');
+		filterGroups.forEach((filterGroup) => {
+			const options = filterGroup.querySelector('.program-filter-options');
+			if (!filterGroup.contains(event.target)) {
+				options.style.display = 'none';
+			}
+		});
 	}
 
 	// Event listener for category filter click
@@ -124,6 +170,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			filterPrograms();
 		}
 	});
+
+	// Event listener for clicking outside the filter options
+	document.addEventListener('click', hideFilterOptionsOnClickOutside);
+
+	// Run on page load
+	markPastDates();
 
 	// Set default active category
 	const defaultCategory = document.querySelector('.js-add-filter[data-filter-value="all"]');
