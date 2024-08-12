@@ -1,152 +1,101 @@
-// DOM Elements
-const programsList = document.querySelector('.js-programs-filter-result');
-const filterButtons = document.querySelectorAll('.js-add-filter');
-const checkboxFilters = document.querySelectorAll('.js-add-remove-filter');
-const activeFiltersList = document.querySelector('.js-active-filters-list');
-const noProgramsMessage = document.querySelector('.js-no-programs-message');
-const programGroupHeader = document.querySelector('.js-program-group-header');
+document.addEventListener('DOMContentLoaded', function () {
+	// Function to reset active classes on all filter links and set the clicked one as active
+	function setActiveCategory(filterLink) {
+	  document.querySelectorAll('.js-add-filter').forEach((el) => {
+		el.classList.remove('active');
+	  });
+	  filterLink.classList.add('active');
 
-// State
-let activeFilters = {
-    program_group: 'all',
-    program_audience: []
-};
+	  // Update the header text with the selected category
+	  const categoryName = filterLink.querySelector('span').textContent;
+	  document.querySelector('.program-group-header-text').textContent = categoryName;
+	}
 
-// Event Listeners
-filterButtons.forEach(button => {
-    button.addEventListener('click', handleFilterButtonClick);
-});
+	// Function to show or hide program details
+	function toggleProgramDetails(programDetailsOpenLink) {
+	  // Hide all other program details and remove focus class
+	  document.querySelectorAll('.program-more-details').forEach((details) => {
+		details.style.display = 'none';
+	  });
+	  document.querySelectorAll('.program').forEach((program) => {
+		program.classList.remove('focus');
+	  });
 
-checkboxFilters.forEach(checkbox => {
-    checkbox.addEventListener('change', handleCheckboxFilterChange);
-});
+	  // Show the clicked program's details and add focus class
+	  const programDetails = programDetailsOpenLink.closest('.program').querySelector('.program-more-details');
+	  programDetails.style.display = 'block';
+	  programDetailsOpenLink.closest('.program').classList.add('focus');
+	}
 
-document.querySelectorAll('.program-more-details-button').forEach(button => {
-    button.addEventListener('click', toggleProgramDetails);
-});
+	// Function to show or hide filter options
+	function toggleFilterOptions(filterGroupHeader) {
+	  const options = filterGroupHeader.querySelector('.program-filter-options');
+	  options.style.display = options.style.display === 'block' ? 'none' : 'block';
+	}
 
-// Filter Functions
-function handleFilterButtonClick(event) {
-    event.preventDefault();
-    const filterName = event.currentTarget.dataset.filterName;
-    const filterValue = event.currentTarget.dataset.filterValue;
+	// Function to filter and display the programs list
+	function filterPrograms() {
+	  const activeCategory = document.querySelector('.js-add-filter.active');
+	  const activeFilters = document.querySelectorAll('.program-filter-options input:checked');
 
-    if (filterName === 'program_group') {
-        updateProgramGroupHeader(filterValue);
-        expandBottomArrow();
-    } else {
-        activeFilters[filterName] = filterValue;
-        updateActiveFilters();
-        applyFilters();
-    }
-}
+	  const activeCategoryValue = activeCategory ? activeCategory.dataset.filterValue : 'all';
+	  const filters = Array.from(activeFilters).map((filter) => filter.value);
 
-function expandBottomArrow() {
-    const programGroupDropdown = document.querySelector('.program-group-dropdown');
-    programGroupDropdown.classList.add('expanded');
-}
+	  // Filter the programs based on selected category and filters
+	  document.querySelectorAll('.program').forEach((program) => {
+		const programFilters = JSON.parse(program.dataset.filter.replace(/'/g, '"'));
+		const programGroups = programFilters.program_group;
+		const programAudiences = programFilters.program_audience;
+		const matchesCategory = activeCategoryValue === 'all' || programGroups.includes(activeCategoryValue);
+		const matchesAudience = filters.length === 0 || filters.some((filter) => programAudiences.includes(filter));
 
-function handleCheckboxFilterChange(event) {
-    const filterName = event.target.dataset.filterName;
-    const filterValue = event.target.dataset.filterValue;
+		if (matchesCategory && matchesAudience) {
+		  program.style.display = 'block';
+		} else {
+		  program.style.display = 'none';
+		}
+	  });
 
-    if (event.target.checked) {
-        activeFilters[filterName].push(filterValue);
-    } else {
-        activeFilters[filterName] = activeFilters[filterName].filter(value => value !== filterValue);
-    }
+	  // Show no programs message if no programs match the filter
+	  const anyVisible = Array.from(document.querySelectorAll('.program')).some((program) => program.style.display !== 'none');
+	  document.querySelector('.no-program-matches').style.display = anyVisible ? 'none' : 'block';
+	}
 
-    updateActiveFilters();
-    applyFilters();
-}
+	// Event listener for category filter click
+	document.querySelectorAll('.js-add-filter').forEach((filterLink) => {
+	  filterLink.addEventListener('click', (event) => {
+		event.preventDefault();
+		setActiveCategory(filterLink);
+		filterPrograms();
+	  });
+	});
 
-function applyFilters() {
-    const programs = programsList.querySelectorAll('.program');
-    let visiblePrograms = 0;
+	// Event listener for toggling program details
+	document.querySelectorAll('.program-more-details-open').forEach((programDetailsOpenLink) => {
+	  programDetailsOpenLink.addEventListener('click', (event) => {
+		event.preventDefault();
+		toggleProgramDetails(programDetailsOpenLink);
+	  });
+	});
 
-    programs.forEach(program => {
-        const programData = JSON.parse(program.dataset.filter);
-        const isVisible = (
-            (activeFilters.program_group === 'all' || programData.program_group.includes(activeFilters.program_group)) &&
-            (activeFilters.program_audience.length === 0 || activeFilters.program_audience.some(audience => programData.program_audience.includes(audience)))
-        );
+	// Event listener for toggling filter options
+	document.querySelectorAll('.program-filter-group .fd-toggle').forEach((filterGroupHeader) => {
+	  filterGroupHeader.addEventListener('click', () => {
+		toggleFilterOptions(filterGroupHeader.closest('.program-filter-group'));
+	  });
+	});
 
-        program.classList.toggle('active', isVisible);
-        if (isVisible) visiblePrograms++;
-    });
+	// Event listener for checking/unchecking filter options
+	document.querySelectorAll('.program-filter-options input').forEach((filterCheckbox) => {
+	  filterCheckbox.addEventListener('change', () => {
+		filterPrograms();
+	  });
+	});
 
-    noProgramsMessage.classList.toggle('show', visiblePrograms === 0);
-}
+	// Set default active category
+	const defaultCategory = document.querySelector('.js-add-filter[data-filter-value="all"]');
+	setActiveCategory(defaultCategory);
 
-function updateActiveFilters() {
-    activeFiltersList.innerHTML = '';
-
-    Object.entries(activeFilters).forEach(([filterName, filterValue]) => {
-        if (filterName !== 'program_group') {
-            if (Array.isArray(filterValue)) {
-                filterValue.forEach(value => {
-                    addActiveFilterTag(filterName, value);
-                });
-            } else if (filterValue !== 'all') {
-                addActiveFilterTag(filterName, filterValue);
-            }
-        }
-    });
-}
-
-function addActiveFilterTag(filterName, filterValue) {
-    const tag = document.createElement('span');
-    tag.classList.add('filter-tag');
-    tag.innerHTML = `${filterValue} <span class="filter-tag-remove" data-filter-name="${filterName}" data-filter-value="${filterValue}">×</span>`;
-    activeFiltersList.appendChild(tag);
-
-    tag.querySelector('.filter-tag-remove').addEventListener('click', removeActiveFilter);
-}
-
-function removeActiveFilter(event) {
-    const filterName = event.target.dataset.filterName;
-    const filterValue = event.target.dataset.filterValue;
-
-    if (Array.isArray(activeFilters[filterName])) {
-        activeFilters[filterName] = activeFilters[filterName].filter(value => value !== filterValue);
-    } else {
-        activeFilters[filterName] = 'all';
-    }
-
-    updateActiveFilters();
-    applyFilters();
-    updateProgramGroupHeader('all');
-}
-
-function updateProgramGroupHeader(groupName) {
-    const groupNames = {
-        all: 'All Programs',
-        jr: 'FC Junior',
-        teens: 'FC Teens',
-        adult: 'FC Adult',
-        parents: 'Parents',
-        families: 'Families',
-        community: 'Community',
-        friendmaker: 'Friendmaker'
-    };
-
-    programGroupHeader.textContent = groupNames[groupName] || 'All Programs';
-
-    // Expand the bottom arrow
-    const programGroupDropdown = document.querySelector('.program-group-dropdown');
-    if (programGroupDropdown) {
-        programGroupDropdown.style.display = 'block';
-    }
-}
-
-function toggleProgramDetails(event) {
-    event.preventDefault();
-    const program = event.target.closest('.program');
-    program.classList.toggle('focus');
-    const detailsSection = program.querySelector('.program-more-details');
-    detailsSection.style.display = program.classList.contains('focus') ? 'block' : 'none';
-}
-
-// Initialize
-updateActiveFilters();
-applyFilters();
+	// Initial filter of programs to match the default category
+	filterPrograms();
+  });
