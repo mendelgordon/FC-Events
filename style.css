@@ -1,3 +1,465 @@
+/* Table of Contents
+==================================================
+    #Base 960 Grid
+    #Tablet (Portrait)
+    #Mobile (Portrait)
+    #Mobile (Landscape)
+    #Clearing */
+/* #Base 960 Grid
+================================================== */
+
+.container {
+	position: relative;
+	width: 100%;
+	margin: 0 auto;
+	clear: both;
+}
+
+
+
+.inner-container {
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+/*no z-index for container_wrap or fixed bgs start disapearing when other elements transition -> weird chrome bug*/
+.container_wrap {
+	clear: both;
+	position: relative;
+	/* z-index: 1; */
+	border-top-style: solid;
+	border-top-width: 1px;
+}
+
+.unit,
+.units {
+	float: left;
+	display: inline;
+	margin-left: 50px;
+	position: relative;
+	z-index: 1;
+	min-height: 1px;
+}
+
+.row {
+	position: relative;
+	margin-bottom: 20px;
+	clear: both;
+}
+
+/* Nested Column Classes */
+body .unit.alpha,
+body .units.alpha,
+body div .first {
+	margin-left: 0;
+	clear: left;
+}
+
+body .unit.alpha,
+body .units.alpha {
+	width: 100%;
+}
+
+/* Base sizes */
+
+.container .av-content-full.units {
+	width: 100%
+}
+
+.container .av-content-small.units {
+	width: 73%
+}
+
+
+.boxed,
+.html_boxed.html_header_sticky #header {
+	width: 1010px;
+}
+
+.container {
+	max-width: 1010px;
+}
+
+
+/* #Tablet (Portrait)
+================================================== */
+/* Note: Design for a width of 768px, Gutter: 30px, Unit: 32px */
+@media only screen and (min-width: 768px) and (max-width: 989px) {
+	.container {
+		max-width: 782px;
+	}
+}
+
+
+
+/* All Tablets and smaller */
+@media only screen and (max-width: 989px) {
+
+	.flex_column.av-break-at-tablet,
+	.av-break-at-tablet .flex_cell {
+		margin: 0;
+		margin-bottom: 20px;
+		width: 100%;
+		display: block;
+	}
+
+	.av-break-at-tablet-flextable,
+	.av-layout-grid-container.av-break-at-tablet {
+		display: block;
+	}
+
+	.av-flex-cells .no_margin {
+		height: auto !important;
+		overflow: hidden;
+	}
+
+}
+
+
+/*  #Mobile (Portrait)
+================================================== */
+
+@media only screen and (max-width: 767px) {
+
+	.boxed,
+	.boxed .stretch_full,
+	.html_boxed.html_header_sticky #header,
+	.html_boxed.html_header_transparency div #header {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.flex_column_table_cell {
+		display: block;
+	}
+
+	.flex_column_table {
+		display: block;
+	}
+
+	.container {
+		width: 85%;
+		max-width: 85%;
+		margin: 0 auto;
+		padding-left: 0;
+		padding-right: 0;
+		float: none;
+	}
+
+	.units,
+	.unit {
+		margin: 0;
+	}
+
+	.container .av-content-small,
+	.flex_column,
+	.av-flex-cells .no_margin {
+		margin: 0;
+		margin-bottom: 20px;
+		width: 100%;
+	}
+
+	.av-flex-cells .no_margin {
+		display: block;
+		margin: 0;
+		height: auto !important;
+		overflow: hidden;
+		padding-left: 8% !important;
+		padding-right: 8% !important;
+	}
+
+	.av-flex-cells .no_margin .flex_cell_inner {
+		width: 100%;
+		max-width: 100%;
+		margin: 0 auto;
+	}
+
+	.av-flex-cells .no_margin.av-zero-padding {
+		padding-left: 0% !important;
+		padding-right: 0% !important;
+	}
+
+	.flex_column:empty {
+		margin: 0;
+	}
+}
+
+/* #Mobile (Landscape)
+================================================== */
+/* Note: Design for a width of 480px */
+@media only screen and (min-width: 480px) and (max-width: 767px) {}
+
+/* #Clearing
+================================================== */
+/* Self Clearing Goodness */
+.container:after {
+	content: "\0020";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+/* Use clearfix class on parent to clear nested units,
+    or wrap each row of units in a <div class="row"> */
+.clearfix:before,
+.clearfix:after,
+.flex_column:before,
+.flex_column:after,
+.widget:before,
+.widget:after {
+	content: '\0020';
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+.flex_column:after,
+.clearfix:after {
+	clear: both;
+}
+
+.row,
+.clearfix {
+	zoom: 1;
+}
+
+/* You can also use a <br class="clear" /> to clear units */
+.clear {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/* Columns for better content separation
+================================================== */
+body div .first,
+body div .no_margin {
+	margin-left: 0;
+}
+
+div .flex_column {
+	z-index: 1;
+	float: left;
+	position: relative;
+	min-height: 1px;
+	width: 100%;
+}
+
+div .av_one_fifth {
+	margin-left: 6%;
+	width: 15.2%;
+}
+
+div .av_one_fourth {
+	margin-left: 6%;
+	width: 20.5%;
+}
+
+div .av_one_third {
+	margin-left: 6%;
+	width: 29.333333333333332%;
+}
+
+div .av_two_fifth {
+	margin-left: 6%;
+	width: 36.4%;
+}
+
+div .av_one_half {
+	margin-left: 6%;
+	width: 47%;
+}
+
+div .av_three_fifth {
+	margin-left: 6%;
+	width: 57.599999999999994%;
+}
+
+div .av_two_third {
+	margin-left: 6%;
+	width: 64.66666666666666%;
+}
+
+div .av_three_fourth {
+	margin-left: 6%;
+	width: 73.5%;
+}
+
+div .av_four_fifth {
+	margin-left: 6%;
+	width: 78.8%;
+}
+
+div .av_one_sixth {
+	margin-left: 6%;
+	width: 11.666666666666666%;
+}
+
+div .av_one_seventh {
+	margin-left: 6%;
+	width: 9.142857142857142%;
+}
+
+div .av_one_eighth {
+	margin-left: 6%;
+	width: 7.25%;
+}
+
+div .av_one_nineth {
+	margin-left: 6%;
+	width: 5.777777777777778%;
+}
+
+div .av_one_tenth {
+	margin-left: 6%;
+	width: 4.6%;
+}
+
+/* Columns for better content separation (no margin)
+================================================== */
+div .no_margin {
+	margin-left: 0;
+	margin-top: 0;
+}
+
+.no_margin.av_one_fifth {
+	width: 20%;
+}
+
+.no_margin.av_one_fourth {
+	width: 25%;
+}
+
+.no_margin.av_one_third {
+	width: 33.3%;
+}
+
+.no_margin.av_two_fifth {
+	width: 40%;
+}
+
+.no_margin.av_one_half {
+	width: 50%;
+}
+
+.no_margin.av_three_fifth {
+	width: 60%;
+}
+
+.no_margin.av_two_third {
+	width: 66.6%;
+}
+
+.no_margin.av_three_fourth {
+	width: 75%;
+}
+
+.no_margin.av_four_fifth {
+	width: 80%;
+}
+
+.no_margin.av_one_sixth {
+	width: 16.666666666666668%;
+}
+
+.no_margin.av_one_seventh {
+	width: 14.285714285714286%;
+}
+
+.no_margin.av_one_eighth {
+	width: 12.5%;
+}
+
+.no_margin.av_one_nineth {
+	width: 11.11111111111111%;
+}
+
+.no_margin.av_one_tenth {
+	width: 10%;
+}
+
+/* Columns with equal height
+================================================== */
+
+.flex_column_table {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	float: left;
+	/* added 4.7.4.1 to fix equal height after individual height columns  */
+}
+
+.flex_column_table.av-equal-height-column-flextable:not(:first-child) {
+	margin-top: 50px;
+	/* added 4.7.5.1 to fix inconsistent layout equal height after individual height columns but remove when first entry  */
+}
+
+.flex_column_table_cell {
+	float: none;
+	display: table-cell;
+}
+
+.av-flex-placeholder {
+	display: table-cell;
+	width: 6%;
+}
+
+.av-align-top {
+	vertical-align: top;
+}
+
+.av-align-middle {
+	vertical-align: middle;
+}
+
+.av-align-bottom {
+	vertical-align: bottom;
+}
+
+/*breaking point logic for the common  1/4 element in ipads. makes sure that it converts to a 1/2 element in most cases*/
+@media only screen and (min-width: 768px) and (max-width: 989px) {
+
+	.av_one_fourth.first.el_before_av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_fourth+.av_one_fourth.flex_column_div,
+	.av_one_half.first+.av_one_fourth.el_before_av_one_fourth.flex_column_div,
+	.av_one_half.first+.av_one_fourth.el_before_av_one_fourth+.av_one_fourth.flex_column_div,
+	.avia-content-slider-inner .av_one_fourth.flex_column_div {
+		margin-left: 4%;
+		width: 48%;
+	}
+
+	.av_one_fourth.first.el_before_av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_fourth.flex_column_div,
+	.av_one_half.first+.av_one_fourth.el_before_av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_half.flex_column_div,
+	.avia-content-slider-inner .av_one_fourth.first.flex_column_div {
+		margin-left: 0%;
+		clear: both;
+	}
+
+	.av_one_half.first.el_before_av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_half.flex_column_div {
+		width: 100%;
+	}
+
+	.av_one_half.first+.av_one_fourth.flex_column_div,
+	.av_one_half.first+.av_one_fourth+.av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_fourth+.av_one_fourth.flex_column_div,
+	.av_one_fourth.first+.av_one_fourth+.av_one_half.flex_column_div {
+		margin-top: 30px;
+	}
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -103,16 +565,12 @@ body {
 .main_color mark,
 .main_color audio,
 .main_color video,
-#top .main_color .pullquote_boxed,
-.responsive #top .main_color .avia-testimonial,
-.responsive #top.avia-blank #main .main_color.container_wrap:first-child,
-#top .main_color.fullsize .template-blog .post_delimiter,
+.main_color .pullquote_boxed,
+.main_color .avia-testimonial,
+.avia-blank #main .main_color.container_wrap:first-child,
+.main_color.fullsize .template-blog .post_delimiter,
 .main_color .related_posts.av-related-style-full a {
 	border-color: #e1e1e1;
-}
-
-.container {
-	padding: 0 50px;
 }
 
 html,
@@ -235,9 +693,9 @@ h3 {
 .main_color .special_amp,
 .main_color .taglist a.activeFilter,
 .main_color #commentform .required,
-#top .main_color .av-no-color.av-icon-style-border a.av-icon-char,
-.html_elegant-blog #top .main_color .blog-categories a,
-.html_elegant-blog #top .main_color .blog-categories a:hover {
+.main_color .av-no-color.av-icon-style-border a.av-icon-char,
+.html_elegant-blog .main_color .blog-categories a,
+.html_elegant-blog .main_color .blog-categories a:hover {
 	color: #394e82;
 }
 
@@ -248,7 +706,7 @@ a {
 }
 
 p {
-    margin: 0.85em 0;
+	margin: 0.85em 0;
 }
 
 /*
@@ -742,11 +1200,11 @@ div .event-info .button:hover {
 }
 
 .button {
-    padding: 9px 22px;
-    cursor: pointer;
-    border: none;
-    -webkit-appearance: none;
-    border-radius: 0px;
+	padding: 9px 22px;
+	cursor: pointer;
+	border: none;
+	-webkit-appearance: none;
+	border-radius: 0px;
 }
 
 .programs-list .program .program-more-details .event-info b {
@@ -894,11 +1352,6 @@ div .event-info .button:hover {
 	z-index: 20;
 }
 
-.program-filters .container {
-	padding-left: 58px;
-	padding-right: 53px;
-}
-
 .program-filter {
 	text-align: right;
 	display: inline-block;
@@ -950,12 +1403,12 @@ div .event-info .button:hover {
 	margin-right: 3px;
 }
 
-#top .program-filter .program-filter-group label span {
+.program-filter .program-filter-group label span {
 	font-size: inherit;
 	font-weight: normal;
 }
 
-#top .program-filter .program-filter-group label input:checked~span {
+.program-filter .program-filter-group label input:checked~span {
 	color: #394E82;
 	font-weight: bold;
 }
@@ -1009,11 +1462,6 @@ div .event-info .button:hover {
 	font-weight: bold;
 	padding: 3px;
 	display: inline-block;
-}
-
-.program-active-filters-list {
-	top: -15px;
-	position: relative;
 }
 
 /* Program Group Header */
