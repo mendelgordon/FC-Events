@@ -184,4 +184,52 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial filter of programs to match the default category
     filterPrograms();
+
+    function createSVGElement(html) {
+        const div = document.createElement('div');
+        div.innerHTML = html.trim();
+        return div.firstChild;
+    }
+
+    const svgs = [
+        {
+            selector: ".js-add-filter[data-filter-value='all'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#333"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#333"></rect></svg>'
+        },
+        {
+            selector: ".js-add-filter[data-filter-value='jr'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#C0D32B"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#C0D32B"></rect></svg>'
+        },
+        {
+            selector: ".js-add-filter[data-filter-value='teens'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#374e81"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#374e81"></rect></svg>'
+        },
+        {
+            selector: ".js-add-filter[data-filter-value='fc-adult'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#705a5a"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#705a5a"></rect></svg>'
+        },
+        {
+            selector: ".js-add-filter[data-filter-value='parents'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#8c2a90"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#8c2a90"></rect></svg>'
+        },
+        {
+            selector: ".js-add-filter[data-filter-value='families'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#fbb03f"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#fbb03f"></rect></svg>'
+        },
+        {
+            selector: ".js-add-filter[data-filter-value='community'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#f0523e"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#f0523e"></rect></svg>'
+        },
+        {
+            selector: ".js-add-filter[data-filter-value='friendmaker'] .triangle-container",
+            html: '<svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none"><polygon points="10 20, 0 0, 20 0" class="triangle" fill="#54a8a9"></polygon><rect x="0" y="0" width="20" height="1" class="square" fill="#54a8a9"></rect></svg>'
+        }
+    ];
+
+    svgs.forEach(({ selector, html }) => {
+        const container = document.querySelector(selector);
+        if (container) {
+            container.appendChild(createSVGElement(html));
+        }
+    });
 });
