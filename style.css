@@ -19,9 +19,7 @@
 	.container_wrap {
 	    clear: both;
 	    position: relative;
-	    /* z-index: 1; */
-	    border-top-style: solid;
-	    border-top-width: 1px;
+	    border-top-width: 0;
 	}
 
 	/* Nested Column Classes */
@@ -642,6 +640,7 @@ Author URI: https://www.clickconsultingservices.com
 	    cursor: pointer;
 	    border: none;
 	    -webkit-appearance: none;
+		appearance: none;
 	    border-radius: 0px;
 	}
 
@@ -792,7 +791,6 @@ Author URI: https://www.clickconsultingservices.com
 
 	.program-filter {
 	    text-align: right;
-	    display: inline-block;
 	    float: right;
 	    margin-bottom: 0;
 	}
