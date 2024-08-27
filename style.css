@@ -851,7 +851,7 @@ Author URI: https://www.clickconsultingservices.com
 	    font-weight: bold;
 	}
 
-	.program-filter .program-filter-group.parent>.program-filter-options {
+	.program-filter .program-filter-group.parent .program-filter-options {
 	    position: absolute;
 	    z-index: 2;
 	    background: #fff;
@@ -862,7 +862,7 @@ Author URI: https://www.clickconsultingservices.com
 	    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
 	}
 
-	.program-filter .program-filter-group.parent.open>.program-filter-options {
+	.program-filter .program-filter-group.parent.open .program-filter-options {
 	    display: block;
 	}
 
@@ -878,7 +878,7 @@ Author URI: https://www.clickconsultingservices.com
 	        margin-right: 15px;
 	    }
 
-	    .program-filter .program-filter-group.parent>.program-filter-options {
+	    .program-filter .program-filter-group.parent .program-filter-options {
 	        right: auto;
 	        left: -10px;
 	    }
