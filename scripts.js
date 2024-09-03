@@ -92,14 +92,19 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // Extract days from the event info
-            const eventInfoText = program.querySelector('.event-info').textContent;
-            const daysMatch = eventInfoText.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/g);
-            if (daysMatch) {
-                daysMatch.forEach(day => {
-                    day = day.trim();
-                    daysSet.add(day);
-                });
-                program.setAttribute('data-filter-days', JSON.stringify(daysMatch.map(day => day.toLowerCase())));
+            const eventInfoElement = program.querySelector('.event-info');
+            if (eventInfoElement) {
+                const eventInfoText = eventInfoElement.textContent;
+                const daysMatch = eventInfoText.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/g);
+                if (daysMatch) {
+                    daysMatch.forEach(day => {
+                        day = day.trim();
+                        daysSet.add(day);
+                    });
+                    program.setAttribute('data-filter-days', JSON.stringify(daysMatch.map(day => day.toLowerCase())));
+                } else {
+                    program.setAttribute('data-filter-days', JSON.stringify([]));
+                }
             } else {
                 program.setAttribute('data-filter-days', JSON.stringify([]));
             }
