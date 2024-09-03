@@ -430,6 +430,17 @@ Author URI: https://www.clickconsultingservices.com
 		display: flex;
 	}
 
+	.category-template {
+		display: flex;
+		gap: 5px;
+		color: white;
+		font-weight: bold;
+	}
+
+	.category-template div[style] {
+		padding: 8px;
+	}
+
 	.programs-category-filter .container a {
 		width: 99%;
 		margin: 1px;
