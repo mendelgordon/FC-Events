@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (eventInfoElement) {
                 const daysMatch = eventInfoElement.textContent.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/g);
                 if (daysMatch) {
-                    programDays = daysMatch.map(day => day.trim().toLowerCase());
+                    programDays = daysMatch.map(day => day.trim());
                     programDays.forEach(day => daysSet.add(day));
                 }
             }
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dayFilterTemplate.innerHTML = `
                 <label>
                     <input type="checkbox" class="js-add-remove-filter" data-filter-name="program_days"
-                           data-filter-value="${day.toLowerCase()}" name="days[]" value="${day.toLowerCase()}">
+                           data-filter-value="${day}" name="days[]" value="${day}">
                     <span>${day}</span>
                 </label>
             `;
