@@ -1,39 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Format the date from the event text to a Date object
-    function parseDateString(dateString) {
-        const [, month, day] = dateString.split(' ');
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const monthIndex = monthNames.indexOf(month);
-        const currentYear = new Date().getFullYear(); // Assume current year
-
-        return new Date(`${monthIndex + 1}/${day.replace(",", "")}/${currentYear}`);
-    }
-
-    // Check and mark past dates
-    function markPastDates() {
-        const now = new Date();
-        document.querySelectorAll('.program').forEach((program) => {
-            const dates = program.querySelectorAll('.remove-top-margin span');
-            let hasFutureDates = false;
-
-            dates.forEach((dateSpan) => {
-                const dateText = dateSpan.textContent.trim();
-                const parsedDate = parseDateString(dateText);
-
-                if (parsedDate < now) {
-                    dateSpan.closest('.remove-top-margin').classList.add('is_past_date');
-                } else {
-                    hasFutureDates = true;
-                }
-            });
-
-            if (!hasFutureDates) {
-                program.classList.remove('active');
-            }
-        });
-    }
-
     // Function to reset active classes on all filter links and set the clicked one as active
     function setActiveCategory(filterLink) {
         document.querySelectorAll('.js-add-filter').forEach((el) => {
@@ -174,9 +140,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event listener for clicking outside the filter options
     document.addEventListener('click', hideFilterOptionsOnClickOutside);
-
-    // Run on page load
-    markPastDates();
 
     // Set default active category
     const defaultCategory = document.querySelector('.js-add-filter[data-filter-value="all"]');

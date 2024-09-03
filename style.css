@@ -398,19 +398,6 @@ Author URI: https://www.clickconsultingservices.com
 		vertical-align: middle;
 	}
 
-	.event-info .is_past_date,
-	.event-info .is_future_date {
-		display: none;
-	}
-
-	.event-info.show_past_dates .is_past_date {
-		display: block;
-	}
-
-	.event-info.show_more_dates .is_future_date {
-		display: block;
-	}
-
 	div .event-info .button {
 		background: #F0533F;
 		border-radius: 50px;
@@ -707,26 +694,6 @@ Author URI: https://www.clickconsultingservices.com
 		.programs-list {
 			grid-template-columns: 1fr;
 		}
-	}
-
-	.programs-list .show-for-volunteer-group {
-		display: none !important;
-	}
-
-
-	.programs-list.volunteer-context .show-for-volunteer-group,
-	.programs-list[data-filter-program_group='volunteers'] .show-for-volunteer-group {
-		display: inline-block !important;
-	}
-
-	.programs-list.volunteer-context div.show-for-volunteer-group,
-	.programs-list[data-filter-program_group='volunteers'] div.show-for-volunteer-group {
-		display: block !important;
-	}
-
-	.programs-list.volunteer-context .hide-for-volunteer-group,
-	.programs-list[data-filter-program_group='volunteers'] .hide-for-volunteer-group {
-		display: none !important;
 	}
 
 	.programs-list .program-categories {
