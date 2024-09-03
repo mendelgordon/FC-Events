@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Cache frequently accessed DOM elements
     const programGroupHeader = document.querySelector('.program-group-header');
-    const programGroupHeaderText = programGroupHeader.querySelector('.js-program-group-header');
-    const activeFiltersContainer = document.querySelector('.js-active-filters-list');
-    const noMatchesElement = document.querySelector('.no-program-matches');
 
     // Initialize categoriesMap
     categories.forEach(category => {
