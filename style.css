@@ -606,6 +606,10 @@ Author URI: https://www.clickconsultingservices.com
 		display: none;
 	}
 
+	.program-more-details-open {
+		font-size: 0;
+	}
+
 	.programs-list .program-details h3 {
 		color: #333;
 	}
