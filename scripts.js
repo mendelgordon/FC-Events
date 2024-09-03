@@ -1,5 +1,86 @@
-
 document.addEventListener('DOMContentLoaded', function () {
+    const categoryContainer = document.querySelector('.programs-category-filter .container');
+	const templateContainer = document.querySelector('.category-template');
+	const categories = templateContainer.children;
+
+	// Generate filters for .programs-category-filter
+	for (let category of categories) {
+		const filterLink = document.createElement('a');
+		filterLink.className = 'js-add-filter';
+		filterLink.dataset.filterProgramGroup = true;
+		filterLink.dataset.filterName = category.dataset.filterName;
+		filterLink.dataset.filterValue = category.dataset.filterValue;
+		filterLink.href = '#';
+		filterLink.style.backgroundColor = category.style.backgroundColor;
+
+		const triangleContainer = document.createElement('div');
+		triangleContainer.className = 'triangle-container';
+		triangleContainer.innerHTML = '&nbsp;';
+
+		const span = document.createElement('span');
+		span.style.backgroundColor = category.style.backgroundColor;
+		span.textContent = category.textContent;
+
+		filterLink.appendChild(triangleContainer);
+		filterLink.appendChild(span);
+
+		categoryContainer.appendChild(filterLink);
+	}
+
+	// Generate .program-group-header
+	const programGroupHeader = document.querySelector('.program-group-header');
+	const programHeaderSpan = document.createElement('span');
+	programHeaderSpan.className = 'js-program-group-header program-group-header-text';
+	programHeaderSpan.textContent = 'All Programs';
+	programGroupHeader.appendChild(programHeaderSpan);
+
+	const programGroupDropdown = document.createElement('div');
+	programGroupDropdown.className = 'program-group-dropdown';
+
+	for (let category of categories) {
+		const dropdownLink = document.createElement('a');
+		dropdownLink.className = 'js-add-filter';
+		dropdownLink.dataset.filterProgramGroup = true;
+		dropdownLink.dataset.filterName = category.dataset.filterName;
+		dropdownLink.dataset.filterValue = category.dataset.filterValue;
+		dropdownLink.href = `/programs/${category.dataset.filterValue === 'all' ? '' : category.dataset.filterValue}`;
+		dropdownLink.style.backgroundColor = category.style.backgroundColor;
+
+		const span = document.createElement('span');
+		span.textContent = category.textContent;
+
+		dropdownLink.appendChild(span);
+		programGroupDropdown.appendChild(dropdownLink);
+	}
+
+	programGroupHeader.appendChild(programGroupDropdown);
+
+	// Generate categories for .programs
+	function addProgramCategories() {
+		const programs = document.querySelectorAll('.program');
+		programs.forEach(program => {
+			const filter = JSON.parse(program.getAttribute('data-filter').replace(/'/g, '"'));
+			const categoriesDiv = program.querySelector('.program-categories');
+
+			filter.program_group.forEach(group => {
+				for (let category of categories) {
+					if (category.dataset.filterValue === group) {
+						const categoryDiv = document.createElement('div');
+						categoryDiv.style.backgroundColor = category.style.backgroundColor;
+
+						const span = document.createElement('span');
+						span.textContent = category.textContent;
+
+						categoryDiv.appendChild(span);
+						categoriesDiv.appendChild(categoryDiv);
+					}
+				}
+			});
+		});
+	}
+
+	addProgramCategories();
+
     // Function to reset active classes on all filter links and set the clicked one as active
     function setActiveCategory(filterLink) {
         document.querySelectorAll('.js-add-filter').forEach((el) => {

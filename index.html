@@ -1,66 +1,26 @@
 <link rel="Stylesheet" href="https://www.friendscleveland.com/css/fonts/font-awesome/font-awesome-5.css?v=98662BF4" id="kfont-awesome" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css" />
 
 <div class="container_wrap container_wrap_first main_color sidebar_right fullsize" id="fc-events-page">
 	<div class="page-heading-container clearfix programs-category-filter">
 		<div class="container">
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="all" style="background-color: #333" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #333">All Programs</span>
-			</a>
-
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="jr" style="background-color: #c0d32b" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #c0d32b">FC Junior</span>
-			</a>
-
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="teens" style="background-color: #374e81" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #374e81">FC Teens</span>
-			</a>
-
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="fc-adult" style="background-color: #705a5a" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #705a5a">FC Adult</span>
-			</a>
-
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="parents" style="background-color: #8c2a90" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #8c2a90">Parents</span>
-			</a>
-
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="families" style="background-color: #fbb03f" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #fbb03f">Families</span>
-			</a>
-
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="community" style="background-color: #f0523e" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #f0523e">Community</span>
-			</a>
-
-			<a class="js-add-filter" data-filter-program-group="true" data-filter-name="program_group" data-filter-value="friendmaker" style="background-color: #54a8a9" href="#">
-				<div class="triangle-container">&nbsp;</div>
-				<span style="background-color: #54a8a9">Friendmaker</span>
-			</a>
+			<div class="category-template" style="display: none;">
+				<div style="background-color: #333" data-filter-name="program_group" data-filter-value="all">All Programs</div>
+				<div style="background-color: #c0d32b" data-filter-name="program_group" data-filter-value="jr">FC Junior</div>
+				<div style="background-color: #374e81" data-filter-name="program_group" data-filter-value="teens">FC Teens</div>
+				<div style="background-color: #705a5a" data-filter-name="program_group" data-filter-value="fc-adult">FC Adult</div>
+				<div style="background-color: #8c2a90" data-filter-name="program_group" data-filter-value="parents">Parents</div>
+				<div style="background-color: #fbb03f" data-filter-name="program_group" data-filter-value="families">Families</div>
+				<div style="background-color: #f0523e" data-filter-name="program_group" data-filter-value="community">Community</div>
+				<div style="background-color: #54a8a9" data-filter-name="program_group" data-filter-value="friendmaker">Friendmaker</div>
+			</div>
 		</div>
 	</div>
 
 	<div class="program-filters">
 		<div class="container">
-			<div class="program-group-header">
-				<span class="js-program-group-header program-group-header-text">All Programs</span>
-
-				<div class="program-group-dropdown">
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #333" data-filter-name="program_group" data-filter-value="all" href="#"><span>All Programs</span></a>
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #c0d32b" data-filter-name="program_group" data-filter-value="jr" href="/programs/fc-junior"><span>FC Junior</span></a>
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #374e81" data-filter-name="program_group" data-filter-value="teens" href="/programs/fc-teens"><span>FC Teens</span></a>
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #705a5a" data-filter-name="program_group" data-filter-value="fc-adult" href="/programs/fc-adult"><span>FC Adult</span></a>
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #8c2a90" data-filter-name="program_group" data-filter-value="parents" href="/programs/parents"><span>Parents</span></a>
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #fbb03f" data-filter-name="program_group" data-filter-value="families" href="/programs/families"><span>Families</span></a>
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #f0523e" data-filter-name="program_group" data-filter-value="community" href="/programs/community"><span>Community</span></a>
-					<a class="js-add-filter" data-filter-program-group="true" style="background: #54a8a9" data-filter-name="program_group" data-filter-value="friendmaker" href="/programs/friendmaker"><span>Friendmaker</span></a>
-				</div>
+			<div class="program-group-header program-group-header-text">
 			</div>
 			<div id="programFilter" class="program-filter">
 				Filter by:
@@ -68,7 +28,9 @@
 					<h2 class="fd-toggle"><i class="fa fa-users fd-toggle">&nbsp;</i> Ages</h2>
 					<span class="active-filters-display fd-toggle">all</span>
 					<div class="program-filter-options">
-						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="3-4" name="audience[]" value="3-4" /><span>Ages 3-4</span></label><label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="5-12" name="audience[]" value="5-12" /><span>Ages 5-12</span></label><label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="13-18" name="audience[]" value="13-18" /><span>Ages 13-18</span></label>
+						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="3-4" name="audience[]" value="3-4" /><span>Ages 3-4</span></label>
+						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="5-12" name="audience[]" value="5-12" /><span>Ages 5-12</span></label>
+						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="13-18" name="audience[]" value="13-18" /><span>Ages 13-18</span></label>
 						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="18+" name="audience[]" value="18+" /><span>Ages 18+</span></label>
 					</div>
 				</div>
@@ -83,40 +45,36 @@
 		<div id="programFilterResponse" class="content av-content-full fullsize">
 			<div class="programs-list-container">
 				<ul class="programs-list js-programs-filter-result" data-filter-program_group="all">
-					<li class="program active" data-filter="{'program_group':['friendmaker'],'program_audience':['5-12','13-18']}">
+					<li class="program active" data-filter="{'program_group':['teens'],'program_audience':['5-12','13-18']}">
 						<div class="program-categories program-more-details-open">
-							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
 						</div>
 						<div class="featured-image-container">
-							<a href="#" class="program-more-details-open">
+							<div class="program-more-details-open">
 								<div class="featured-image" style="background-image: url(https://w2.chabad.org/media/images/1058/buWu10582546.jpg)">&nbsp;</div>
-							</a>
+							</div>
 						</div>
 						<div class="program-details">
-							<h3>Volunteer Orientation</h3>
+							<h3>Social Sports</h3>
+							Enjoy fun, interactive sport games&nbsp;led by a personal fitness instructor.
 
-							Sunday, August 4
-							<a href="#" class="program-more-details-open program-more-details-button">View more details »</a>
+							<div class="program-more-details-open program-more-details-button">View more details »</div>
 
 							<div class="program-more-details">
 								<div class="excerpt">
 									<div id="main-content">
-										<p>Prior to volunteering, each teenage volunteer and a parent are required to attend a Volunteer Orientation. Orientation gives volunteers the opportunity to become familiar with the facility and to learn more about what to expect from volunteering at Friendship Circle programs.</p>
+										<p>This program is open to participants of all abilities. We recruit teen FriendMakers to match up with children that need extra support and build friendship through exciting enrichment opportunities.</p>
 									</div>
 								</div>
 
 								<div class="event-info">
-									<div>
-										<b><i class="fa fa-calendar" aria-hidden="true">&nbsp;</i></b>
-									</div>
-									<div class="remove-top-margin">
-										<b>
-											<i class="fa" aria-hidden="true">&nbsp;</i>
-										</b>
-										<span>Sunday, August 4</span><br />
-									</div>
-									<b><i class="fa fa-clock-o" aria-hidden="true">&nbsp;</i></b> <span>10:30am</span><br />
-									<b><i class="fa fa-map-marker" aria-hidden="true">&nbsp;</i></b> <span>LifeTown</span><br />
+									<p>Age: 5–18<br />
+										Fee: $140&nbsp;(7&nbsp;days)<br />
+										Dates: Thursdays -&nbsp;Sept. 5, 12, 19, 26; Oct. 10<br />
+										Time: 4:00–5:00 p.m.<br />
+										Location: Friendship Circle<br />
+										ACE funding accepted<br />
+										<img alt="" height="50" src="https://w2.chabad.org/media/images/1272/WiLG12720523.png" width="50">
+									</p>
 								</div>
 								<a href="#" class="more-details">View more details »</a>
 							</div>
@@ -125,39 +83,31 @@
 
 					<li class="program active" data-filter="{'program_group':['jr','friendmaker'],'program_audience':['3-4']}">
 						<div class="program-categories program-more-details-open">
-							<div style="background-color: #c0d32b"><span>FC Junior</span></div>
-							<div style="background-color: #54a8a9"><span>friendmaker</span></div>
 						</div>
 						<div class="featured-image-container">
-							<a href="#" class="program-more-details-open">
+							<div class="program-more-details-open">
 								<div class="featured-image" style="background-image: url(https://w2.chabad.org/media/images/1058/buWu10582546.jpg)">&nbsp;</div>
-							</a>
+							</div>
 						</div>
 						<div class="program-details">
-							<h3>Family Fun Sundays</h3>
-
-							Sunday, August 4
-							<a href="#" class="program-more-details-open program-more-details-button">View more details »</a>
+							<h3>Better Together</h3>
+							Children of all abilities and teens get the opportunity to give back by bringing joy to seniors through fun, engaging inter-generational interactions.
+							<div class="program-more-details-open program-more-details-button">View more details »</div>
 
 							<div class="program-more-details">
 								<div class="excerpt">
 									<div id="main-content">
-										<p>Fun for the whole family! Play in the gym, experience the sand room and sensory rooms, explore the playground, or create in the art room. *Please note that the LifeTown Shoppes are NOT included. Parents/guardians must remain with their children at all times. Ages 0-10</p>
+										<p>This program is open to participants of all abilities. We recruit teen FriendMakers to match up with children that need extra support and build friendship through exciting enrichment opportunities.</p>
 									</div>
 								</div>
 
 								<div class="event-info">
-									<div>
-										<b><i class="fa fa-calendar" aria-hidden="true">&nbsp;</i></b>
-									</div>
-									<div class="remove-top-margin">
-										<b>
-											<i class="fa" aria-hidden="true">&nbsp;</i>
-										</b>
-										<span>Sunday, August 4</span><br />
-									</div>
-									<b><i class="fa fa-clock-o" aria-hidden="true">&nbsp;</i></b> <span>10:00 am to 12:00 pm</span><br />
-									<a class="button" href="#" target="" title="Register"> Register </a><br />
+									<p>Age: 13 & Up<br />
+										Fee: No Charge<br />
+										Dates: Sundays - Sept. 15, 22, 29; Oct. 6, 13, 27; Nov. 3, 10, 17, 24; Dec. 1, 8, 15<br />
+										Time: 1:00–2:30 p.m.<br />
+										Location: R.H. Myers Apartments<br />
+										<a class="button" href="#" title="Register"> Register </a><br />
 								</div>
 								<a href="#" class="more-details">View more details »</a>
 							</div>

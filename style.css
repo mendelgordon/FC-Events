@@ -384,10 +384,6 @@ Author URI: https://www.clickconsultingservices.com
 		margin-top: 30px;
 	}
 
-	.main_color .event-info .remove-top-margin {
-		margin-top: -5px;
-	}
-
 	.event-info b {
 		color: #394E82;
 		font-size: 18px;
@@ -519,8 +515,7 @@ Author URI: https://www.clickconsultingservices.com
 		}
 
 		.programs-category-filter .container a {
-			width: 32.5%;
-			margin-bottom: 3px;
+			width: 30%;
 		}
 
 		.programs-category-filter .container a:before {
@@ -539,9 +534,8 @@ Author URI: https://www.clickconsultingservices.com
 
 	@media (max-width: 650px) {
 		.programs-category-filter .container a {
-			width: 49%;
+			width: 45%;
 			margin-bottom: 3px;
-			min-height: 60px;
 		}
 	}
 
@@ -611,6 +605,12 @@ Author URI: https://www.clickconsultingservices.com
 
 	.programs-list .program-more-details-button {
 		display: block;
+		color: #394e82;
+	}
+
+	.programs-list .program-more-details-button:hover {
+		cursor: pointer;
+		text-decoration: underline;
 	}
 
 	.programs-list .program .program-more-details {
@@ -880,7 +880,15 @@ Author URI: https://www.clickconsultingservices.com
 	}
 
 	@media (max-width: 1000px) {
-		.programs-category-filter {
+		.programs-category-filter .container {
+			gap: 5px;
+		}
+
+		.programs-category-filter .container::after {
+			display: none;
+		}
+
+		.programs-category-filter .triangle-container {
 			display: none;
 		}
 
