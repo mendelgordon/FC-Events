@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const daysSet = new Set();
     const categoryContainer = document.querySelector('.programs-category-filter .container');
     const templateContainer = document.querySelector('.category-template');
     templateContainer.style.display = 'none';
@@ -89,6 +90,39 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             });
+
+            // Extract days from the event info
+            const eventInfoText = program.querySelector('.event-info').textContent;
+            const daysMatch = eventInfoText.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/g);
+            if (daysMatch) {
+                daysMatch.forEach(day => {
+                    day = day.trim();
+                    daysSet.add(day);
+                });
+                program.setAttribute('data-filter-days', JSON.stringify(daysMatch.map(day => day.toLowerCase())));
+            } else {
+                program.setAttribute('data-filter-days', JSON.stringify([]));
+            }
+        });
+
+        // Update the Days filter options in the DOM
+        const daysFilterOptions = document.querySelector('.program-filter-group[data-filter-group-name="program_days"] .program-filter-options');
+        daysSet.forEach(day => {
+            const dayFilterLabel = document.createElement('label');
+            const dayCheckBox = document.createElement('input');
+            dayCheckBox.type = 'checkbox';
+            dayCheckBox.className = 'js-add-remove-filter';
+            dayCheckBox.dataset.filterName = 'program_days';
+            dayCheckBox.dataset.filterValue = day.toLowerCase();
+            dayCheckBox.name = 'days[]';
+            dayCheckBox.value = day.toLowerCase();
+
+            const daySpan = document.createElement('span');
+            daySpan.textContent = day;
+
+            dayFilterLabel.appendChild(dayCheckBox);
+            dayFilterLabel.appendChild(daySpan);
+            daysFilterOptions.appendChild(dayFilterLabel);
         });
     }
 
@@ -118,19 +152,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function filterPrograms() {
         const activeCategory = document.querySelector('.js-add-filter.active');
-        const activeFilters = document.querySelectorAll('.program-filter-options input:checked');
+        const activeAudienceFilters = document.querySelectorAll('.program-filter-group[data-filter-group-name="program_audience"] input:checked');
+        const activeDaysFilters = document.querySelectorAll('.program-filter-group[data-filter-group-name="program_days"] input:checked');
 
         const activeCategoryValue = activeCategory ? activeCategory.dataset.filterValue : 'all-programs';
-        const filters = Array.from(activeFilters).map(filter => filter.value);
+        const audienceFilters = Array.from(activeAudienceFilters).map(filter => filter.value);
+        const daysFilters = Array.from(activeDaysFilters).map(filter => filter.value);
 
         document.querySelectorAll('.program').forEach(program => {
             const programFilters = JSON.parse(program.dataset.filter.replace(/'/g, '"'));
             const programGroups = programFilters.program_group;
             const programAudiences = programFilters.program_audience;
-            const matchesCategory = activeCategoryValue === 'all-programs' || programGroups.includes(activeCategoryValue);
-            const matchesAudience = filters.length === 0 || filters.some(filter => programAudiences.includes(filter));
+            const programDays = JSON.parse(program.dataset.filterDays);
 
-            program.style.display = matchesCategory && matchesAudience ? 'block' : 'none';
+            const matchesCategory = activeCategoryValue === 'all-programs' || programGroups.includes(activeCategoryValue);
+            const matchesAudience = audienceFilters.length === 0 || audienceFilters.some(filter => programAudiences.includes(filter));
+            const matchesDays = daysFilters.length === 0 || daysFilters.some(filter => programDays.includes(filter));
+
+            program.style.display = matchesCategory && matchesAudience && matchesDays ? 'block' : 'none';
         });
 
         const anyVisible = Array.from(document.querySelectorAll('.program')).some(program => program.style.display !== 'none');
