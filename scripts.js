@@ -3,43 +3,52 @@ document.addEventListener('DOMContentLoaded', function () {
     const categoryContainer = document.querySelector('.programs-category-filter .container');
     const templateContainer = document.querySelector('.category-template');
     templateContainer.style.display = 'none';
-    const categories = templateContainer.children;
+    const categories = Array.from(templateContainer.children);
+    const categoriesMap = new Map();
 
     const generateFilterValue = (text) => text.toLowerCase().replace(/\s/g, '-');
 
+    // Cache frequently accessed DOM elements
+    const programGroupHeader = document.querySelector('.program-group-header');
+
+    // Initialize categoriesMap
+    categories.forEach(category => {
+        const filterValue = generateFilterValue(category.innerText);
+        categoriesMap.set(filterValue, {
+            text: category.innerText,
+            color: category.style.backgroundColor
+        });
+    });
+
     // Generate filters for .programs-category-filter
+    const fragment = document.createDocumentFragment();
     for (let category of categories) {
-        const filterLink = document.createElement('a');
         const filterValue = generateFilterValue(category.innerText);
         const color = category.style.backgroundColor;
 
+        const filterLink = document.createElement('a');
         filterLink.className = 'js-add-filter';
-        filterLink.dataset.filterProgramGroup = true;
+        filterLink.dataset.filterProgramGroup = 'true';
         filterLink.dataset.filterName = 'program_group';
         filterLink.dataset.filterValue = filterValue;
         filterLink.href = '#';
         filterLink.style.backgroundColor = color;
 
-        const triangleContainer = document.createElement('div');
-        triangleContainer.className = 'triangle-container';
-        triangleContainer.innerHTML = `
-            <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
-                <polygon points="10 20, 0 0, 20 0" class="triangle" fill="${color}"></polygon>
-                <rect x="0" y="0" width="20" height="1" class="square" fill="${color}"></rect>
-            </svg>`;
+        filterLink.innerHTML = `
+            <div class="triangle-container">
+                <svg height="50px" width="100%" viewBox="0 0 20 20" preserveAspectRatio="none">
+                    <polygon points="10 20, 0 0, 20 0" class="triangle" fill="${color}"></polygon>
+                    <rect x="0" y="0" width="20" height="1" class="square" fill="${color}"></rect>
+                </svg>
+            </div>
+            <span style="background-color: ${color}">${category.innerText}</span>
+        `;
 
-        const span = document.createElement('span');
-        span.style.backgroundColor = color;
-        span.textContent = category.innerText;
-
-        filterLink.appendChild(triangleContainer);
-        filterLink.appendChild(span);
-
-        categoryContainer.appendChild(filterLink);
+        fragment.appendChild(filterLink);
     }
+    categoryContainer.appendChild(fragment);
 
     // Generate .program-group-header
-    const programGroupHeader = document.querySelector('.program-group-header');
     const programHeaderSpan = document.createElement('span');
     programHeaderSpan.className = 'js-program-group-header program-group-header-text';
     programHeaderSpan.textContent = 'All Programs';
@@ -48,87 +57,71 @@ document.addEventListener('DOMContentLoaded', function () {
     const programGroupDropdown = document.createElement('div');
     programGroupDropdown.className = 'program-group-dropdown';
 
-    for (let category of categories) {
-        const dropdownLink = document.createElement('a');
+    const dropdownFragment = document.createDocumentFragment();
+    categories.forEach(category => {
         const filterValue = generateFilterValue(category.innerText);
-
+        const dropdownLink = document.createElement('a');
         dropdownLink.className = 'js-add-filter';
-        dropdownLink.dataset.filterProgramGroup = true;
+        dropdownLink.dataset.filterProgramGroup = 'true';
         dropdownLink.dataset.filterName = 'program_group';
         dropdownLink.dataset.filterValue = filterValue;
         dropdownLink.href = `/programs/${filterValue === 'all-programs' ? '' : filterValue}`;
         dropdownLink.style.backgroundColor = category.style.backgroundColor;
+        dropdownLink.innerHTML = `<span>${category.innerText}</span>`;
+        dropdownFragment.appendChild(dropdownLink);
+    });
 
-        const span = document.createElement('span');
-        span.textContent = category.innerText;
-
-        dropdownLink.appendChild(span);
-        programGroupDropdown.appendChild(dropdownLink);
-    }
-
+    programGroupDropdown.appendChild(dropdownFragment);
     programGroupHeader.appendChild(programGroupDropdown);
 
     // Generate categories for .programs
     function addProgramCategories() {
         const programs = document.querySelectorAll('.program');
+        const daysFilterOptions = document.querySelector('.program-filter-group[data-filter-group-name="program_days"] .program-filter-options');
+        const daysFragment = document.createDocumentFragment();
+
         programs.forEach(program => {
             const filter = JSON.parse(program.getAttribute('data-filter').replace(/'/g, '"'));
             const categoriesDiv = program.querySelector('.program-categories');
 
+            const categoryFragment = document.createDocumentFragment();
             filter.program_group.forEach(group => {
-                const groupText = group.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                for (let category of categories) {
-                    if (generateFilterValue(category.innerText) === group) {
-                        const categoryDiv = document.createElement('div');
-                        categoryDiv.style.backgroundColor = category.style.backgroundColor;
-
-                        const span = document.createElement('span');
-                        span.textContent = groupText;
-
-                        categoryDiv.appendChild(span);
-                        categoriesDiv.appendChild(categoryDiv);
-                    }
+                const category = categoriesMap.get(group);
+                if (category) {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.style.backgroundColor = category.color;
+                    categoryDiv.innerHTML = `<span>${category.text}</span>`;
+                    categoryFragment.appendChild(categoryDiv);
                 }
             });
+            categoriesDiv.appendChild(categoryFragment);
 
             // Extract days from the event info
             const eventInfoElement = program.querySelector('.event-info');
+            let programDays = [];
             if (eventInfoElement) {
-                const eventInfoText = eventInfoElement.textContent;
-                const daysMatch = eventInfoText.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/g);
+                const daysMatch = eventInfoElement.textContent.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/g);
                 if (daysMatch) {
-                    daysMatch.forEach(day => {
-                        day = day.trim();
-                        daysSet.add(day);
-                    });
-                    program.setAttribute('data-filter-days', JSON.stringify(daysMatch.map(day => day.toLowerCase())));
-                } else {
-                    program.setAttribute('data-filter-days', JSON.stringify([]));
+                    programDays = daysMatch.map(day => day.trim());
+                    programDays.forEach(day => daysSet.add(day));
                 }
-            } else {
-                program.setAttribute('data-filter-days', JSON.stringify([]));
             }
+            program.dataset.filterDays = JSON.stringify(programDays);
         });
 
         // Update the Days filter options in the DOM
-        const daysFilterOptions = document.querySelector('.program-filter-group[data-filter-group-name="program_days"] .program-filter-options');
+        const dayFilterTemplate = document.createElement('template');
         daysSet.forEach(day => {
-            const dayFilterLabel = document.createElement('label');
-            const dayCheckBox = document.createElement('input');
-            dayCheckBox.type = 'checkbox';
-            dayCheckBox.className = 'js-add-remove-filter';
-            dayCheckBox.dataset.filterName = 'program_days';
-            dayCheckBox.dataset.filterValue = day.toLowerCase();
-            dayCheckBox.name = 'days[]';
-            dayCheckBox.value = day.toLowerCase();
-
-            const daySpan = document.createElement('span');
-            daySpan.textContent = day;
-
-            dayFilterLabel.appendChild(dayCheckBox);
-            dayFilterLabel.appendChild(daySpan);
-            daysFilterOptions.appendChild(dayFilterLabel);
+            dayFilterTemplate.innerHTML = `
+                <label>
+                    <input type="checkbox" class="js-add-remove-filter" data-filter-name="program_days"
+                           data-filter-value="${day}" name="days[]" value="${day}">
+                    <span>${day}</span>
+                </label>
+            `;
+            daysFragment.appendChild(dayFilterTemplate.content.cloneNode(true));
         });
+        daysFilterOptions.appendChild(daysFragment);
     }
 
     addProgramCategories();
