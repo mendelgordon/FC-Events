@@ -955,12 +955,13 @@ Author URI: https://www.clickconsultingservices.com
 		color: white;
 		padding: 20px;
 		text-align: center;
-		font-family: Arial, sans-serif;
 		border-radius: 5px;
+		margin: 15px;
 	}
 
 	.registration-text {
-		margin-bottom: 15px;
+		margin-bottom: 15px !important;
+		color: white !important;
 	}
 
 	.registration-buttons {
