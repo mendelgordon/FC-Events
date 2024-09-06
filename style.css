@@ -613,7 +613,7 @@ Author URI: https://www.clickconsultingservices.com
 		display: none;
 	}
 
-	.program-categories .program-more-details-open {
+	.program-categories.program-more-details-open {
 		font-size: 0;
 	}
 
