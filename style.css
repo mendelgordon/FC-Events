@@ -933,3 +933,55 @@ Author URI: https://www.clickconsultingservices.com
 			border-radius: 2px;
 		}
 	}
+
+
+	.fine-print {
+		font-size: 10px;
+		line-height: 1.2;
+		color: grey;
+		margin-top: 25px;
+		margin-bottom: 5px;
+	}
+
+	.event-info i.fas {
+		color: #67bcb1;
+		width: 25px;
+		text-align: center;
+		padding-right: 5px;
+	}
+
+	.registration-container {
+		background-color: #2F68B2;
+		color: white;
+		padding: 20px;
+		text-align: center;
+		font-family: Arial, sans-serif;
+		border-radius: 5px;
+	}
+
+	.registration-text {
+		margin-bottom: 15px;
+	}
+
+	.registration-buttons {
+		margin-top: 10px;
+	}
+
+	.registration-buttons a {
+		text-decoration: none;
+		background-color: white;
+		color: #2F68B2;
+		border: 2px solid #2F68B2;
+		padding: 10px 20px;
+		margin: 0 10px;
+		border-radius: 5px;
+		font-size: 16px;
+		cursor: pointer;
+		font-weight: bold;
+		display: inline-block;
+	}
+
+	.registration-buttons a:hover {
+		background-color: #1F4D8A;
+		color: white;
+	}

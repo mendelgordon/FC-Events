@@ -211,10 +211,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.querySelectorAll('.program-more-details-open').forEach(programDetailsOpenLink => {
-        programDetailsOpenLink.addEventListener('click', event => {
-            event.preventDefault();
-            toggleProgramDetails(programDetailsOpenLink);
+    document.querySelectorAll('li.program').forEach(program => {
+        program.addEventListener('click', () => {
+            toggleProgramDetails(program.querySelector('.program-more-details-open'));
         });
     });
 
@@ -227,10 +226,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.addEventListener('click', event => {
-        if (event.target.classList.contains('js-filter-tag-remove')) {
-            const filterValue = event.target.dataset.filterValue;
-            const filterName = event.target.dataset.filterName;
-
+        const target = event.target;
+        if (target.classList.contains('js-filter-tag-remove')) {
+            const { filterValue, filterName } = target.dataset;
             document.querySelector(`.program-filter-options input[data-filter-name="${filterName}"][value="${filterValue}"]`).checked = false;
             filterPrograms();
         }
