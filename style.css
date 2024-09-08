@@ -515,6 +515,13 @@ Author URI: https://www.clickconsultingservices.com
 		box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2), inset 0px 1px 4px rgba(0, 0, 0, 0.2);
 	}
 
+	@media screen and (max-width: 1000px) {
+		.programs-category-filter a.active {
+			border-width: 3px;
+			border-color: #67bcb1;
+		}
+	}
+
 	.programs-category-filter a:active {
 		transform: translateY(1px);
 	}
@@ -606,7 +613,7 @@ Author URI: https://www.clickconsultingservices.com
 		display: none;
 	}
 
-	.program-more-details-open {
+	.program-categories.program-more-details-open {
 		font-size: 0;
 	}
 
@@ -925,4 +932,57 @@ Author URI: https://www.clickconsultingservices.com
 			margin-bottom: 3px;
 			border-radius: 2px;
 		}
+	}
+
+
+	.fine-print {
+		font-size: 10px;
+		line-height: 1.2;
+		color: grey;
+		margin-top: 25px;
+		margin-bottom: 5px;
+	}
+
+	.event-info i.fas {
+		color: #67bcb1;
+		width: 25px;
+		text-align: center;
+		padding-right: 5px;
+	}
+
+	.registration-container {
+		background-color: #2F68B2;
+		color: white;
+		padding: 20px;
+		text-align: center;
+		border-radius: 5px;
+		margin: 15px;
+	}
+
+	.registration-text {
+		margin-bottom: 15px !important;
+		color: white !important;
+	}
+
+	.registration-buttons {
+		margin-top: 10px;
+	}
+
+	.registration-buttons a {
+		text-decoration: none;
+		background-color: white;
+		color: #2F68B2;
+		border: 2px solid #2F68B2;
+		padding: 10px 20px;
+		margin: 0 10px;
+		border-radius: 5px;
+		font-size: 16px;
+		cursor: pointer;
+		font-weight: bold;
+		display: inline-block;
+	}
+
+	.registration-buttons a:hover {
+		background-color: #1F4D8A;
+		color: white;
 	}

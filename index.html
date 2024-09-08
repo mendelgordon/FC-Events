@@ -2,131 +2,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css" />
 
+<div class="registration-container">
+    <p class="registration-text">To register for our programs, you will first need to create an account in our new parent portal.</p>
+
+    <div class="registration-buttons"><a class="registration-sign-up" href="https://www.friendscleveland.com/signup">Sign Up</a> <a class="registration-sign-in" href="https://portal.friendscleveland.com/signin">Sign In</a></div>
+</div>
+
 <div class="container_wrap container_wrap_first main_color sidebar_right fullsize" id="fc-events-page">
-	<div class="page-heading-container clearfix programs-category-filter">
-		<div class="container">
-			<div class="category-template">
-				<div style="background-color: #333">All Programs</div>
-				<div style="background-color: #c0d32b">FC Junior</div>
-				<div style="background-color: #374e81">FC Teens</div>
-				<div style="background-color: #705a5a">FC Adult</div>
-				<div style="background-color: #8c2a90">Parents</div>
-				<div style="background-color: #fbb03f">Families</div>
-				<div style="background-color: #f0523e">Community</div>
-				<div style="background-color: #54a8a9">Friendmaker</div>
-			</div>
-		</div>
-	</div>
+    <div class="page-heading-container clearfix programs-category-filter">
+        <div class="container">
+            <div class="category-template">
+                <div style="background-color: #333">All Programs</div>
+                <div style="background-color: #c0d32b">FC Junior</div>
+                <div style="background-color: #374e81">FC Teens</div>
+                <div style="background-color: #705a5a">FC Adult</div>
+                <div style="background-color: #8c2a90">Parents</div>
+                <div style="background-color: #fbb03f">Families</div>
+                <div style="background-color: #f0523e">Community</div>
+                <div style="background-color: #54a8a9">Friendmaker</div>
+            </div>
+        </div>
+    </div>
 
-	<div class="program-filters">
-		<div class="container">
-			<div class="program-group-header program-group-header-text">
-			</div>
-			<div id="programFilter" class="program-filter">
-				Filter by:
-				<div class="program-filter-group parent" data-filter-group-name="program_audience" data-display-for-group="" style="display: inline-block;">
-					<h2 class="fd-toggle"><i class="fa fa-users fd-toggle">&nbsp;</i> Ages</h2>
-					<span class="active-filters-display fd-toggle">all</span>
-					<div class="program-filter-options">
-						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="3-4" name="audience[]" value="3-4" /><span>Ages 3-4</span></label>
-						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="5-12" name="audience[]" value="5-12" /><span>Ages 5-12</span></label>
-						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="13-18" name="audience[]" value="13-18" /><span>Ages 13-18</span></label>
-						<label><input type="checkbox" class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="18+" name="audience[]" value="18+" /><span>Ages 18+</span></label>
-					</div>
-				</div>
-				<div class="program-filter-group parent" data-filter-group-name="program_days" data-display-for-group="" style="display: inline-block;">
-					<h2 class="fd-toggle"><i class="fa fa-calendar fd-toggle">&nbsp;</i> Days</h2>
-					<span class="active-filters-display fd-toggle">all</span>
-					<div class="program-filter-options"></div>
-				</div>
-			</div>
-		</div>
-		<div class="container">
-			<div class="program-active-filters-list js-active-filters-list">&nbsp;</div>
-		</div>
-	</div>
+    <div class="program-filters">
+        <div class="container">
+            <div class="program-group-header program-group-header-text">&nbsp;</div>
 
-	<div class="container template-blog">
-		<div id="programFilterResponse" class="content av-content-full fullsize">
-			<div class="programs-list-container">
-				<ul class="programs-list js-programs-filter-result" data-filter-program_group="all-programs">
-					<li class="program active" data-filter='{"program_group":["fc-teens"],"program_audience":["5-12","13-18"]}'>
-						<div class="program-categories program-more-details-open">
-						</div>
-						<div class="featured-image-container">
-							<div class="program-more-details-open">
-								<div class="featured-image" style="background-image: url(https://w2.chabad.org/media/images/1058/buWu10582546.jpg)">&nbsp;</div>
-							</div>
-						</div>
-						<div class="program-details">
-							<h3>Social Sports</h3>
-							Enjoy fun, interactive sport games&nbsp;led by a personal fitness instructor.
+            <div class="program-filter" id="programFilter">Filter by:
+                <div class="program-filter-group parent" data-display-for-group="" data-filter-group-name="program_audience" style="display: inline-block;">
+                    <h2 class="fd-toggle"><i class="fa fa-users fd-toggle">&nbsp;</i> Ages</h2>
+                    <span class="active-filters-display fd-toggle">all</span>
 
-							<div class="program-more-details-open program-more-details-button">View more details »</div>
+                    <div class="program-filter-options"><label><input class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="3-4" name="audience[]" type="checkbox" value="3-4" /><span>Ages 3-4</span></label> <label> <input class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="5-12" name="audience[]" type="checkbox" value="5-12" /><span>Ages 5-12</span></label> <label> <input class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="13-18" name="audience[]" type="checkbox" value="13-18" /><span>Ages 13-18</span></label> <label> <input class="js-add-remove-filter" data-filter-name="program_audience" data-filter-value="18+" name="audience[]" type="checkbox" value="18+" /><span>Ages 18+</span></label></div>
+                </div>
 
-							<div class="program-more-details">
-								<div class="excerpt">
-									<div id="main-content">
-										<p>This program is open to participants of all abilities. We recruit teen FriendMakers to match up with children that need extra support and build friendship through exciting enrichment opportunities.</p>
-									</div>
-								</div>
+                <div class="program-filter-group parent" data-display-for-group="" data-filter-group-name="program_days" style="display: inline-block;">
+                    <h2 class="fd-toggle"><i class="fa fa-calendar fd-toggle">&nbsp;</i> Days</h2>
+                    <span class="active-filters-display fd-toggle">all</span>
 
-								<div class="event-info">
-									<p>Age: 5–18<br />
-										Fee: $140&nbsp;(7&nbsp;days)<br />
-										Dates: Thursdays -&nbsp;Sept. 5, 12, 19, 26; Oct. 10<br />
-										Time: 4:00–5:00 p.m.<br />
-										Location: Friendship Circle<br />
-										ACE funding accepted<br />
-										<img alt="" height="50" src="https://w2.chabad.org/media/images/1272/WiLG12720523.png" width="50">
-									</p>
-								</div>
-								<a href="#" class="more-details">View more details »</a>
-							</div>
-						</div>
-					</li>
+                    <div class="program-filter-options">&nbsp;</div>
+                </div>
+            </div>
+        </div>
 
-					<li class="program active" data-filter='{"program_group":["fc-junior","friendmaker"],"program_audience":["3-4"]}'>
-						<div class="program-categories program-more-details-open">
-						</div>
-						<div class="featured-image-container">
-							<div class="program-more-details-open">
-								<div class="featured-image" style="background-image: url(https://w2.chabad.org/media/images/1058/buWu10582546.jpg)">&nbsp;</div>
-							</div>
-						</div>
-						<div class="program-details">
-							<h3>Better Together</h3>
-							Children of all abilities and teens get the opportunity to give back by bringing joy to seniors through fun, engaging inter-generational interactions.
-							<div class="program-more-details-open program-more-details-button">View more details »</div>
+        <div class="container">
+            <div class="program-active-filters-list js-active-filters-list">&nbsp;</div>
+        </div>
+    </div>
 
-							<div class="program-more-details">
-								<div class="excerpt">
-									<div id="main-content">
-										<p>This program is open to participants of all abilities. We recruit teen FriendMakers to match up with children that need extra support and build friendship through exciting enrichment opportunities.</p>
-									</div>
-								</div>
+    <div class="container template-blog">
+        <div class="content av-content-full fullsize" id="programFilterResponse">
+            <div class="programs-list-container">
+                <ul class="programs-list js-programs-filter-result" data-filter-program_group="all-programs">
+                    <!-- Begin Program Block -->
+                    <li class="program active" data-filter='{"program_group":["fc-teens"],"program_audience":["5-12","13-18"]}'>
+                        <div class="program-categories program-more-details-open">
+                        </div>
+                        <div class="featured-image-container">
+                            <div class="program-more-details-open">
+                                <div class="featured-image" style="background-image: url(https://w2.chabad.org/media/images/1058/buWu10582546.jpg)">&nbsp;</div>
+                            </div>
+                        </div>
+                        <div class="program-details">
+                            <h3>Social Sports</h3>
+                            Enjoy fun, interactive sport games&nbsp;led by a personal fitness instructor.
+                            <div class="program-more-details-open program-more-details-button">View more details &raquo;</div>
+                            <div class="program-more-details">
+                                <div class="event-info">
+                                    <p>
+                                        <i class="fas fa-user">&nbsp;</i>
+                                        Age: 5&ndash;18<br />
+                                        <i class="fas fa-dollar-sign">&nbsp;</i>
+                                        Fee: $140 (7 days)<br />
+                                        <i class="fas fa-calendar-alt">&nbsp;</i>
+                                        Dates: Thursdays - Sept. 5, 12, 19, 26; Oct. 10<br />
+                                        <i class="fas fa-clock">&nbsp;</i>
+                                        Time: 4:00&ndash;5:00 p.m.<br />
+                                        <i class="fas fa-map-marker-alt">&nbsp;</i>
+                                        Location: Friendship Circle<br />
+                                        <i class="fas fa-check">&nbsp;</i>
+                                        ACE funding accepted<br />
+                                        <img alt="" height="50" src="https://w2.chabad.org/media/images/1272/WiLG12720523.png" width="50" />
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fine-print">This program is open to participants of all abilities. We recruit teen FriendMakers to match up with children that need extra support and build friendship through exciting enrichment opportunities.</div>
+                        </div>
+                    </li>
+                    <!-- End Program Block -->
+                    <!-- Begin Program Block -->
+                    <li class="program active" data-filter='{"program_group":["fc-junior","friendmaker"],"program_audience":["3-4"]}'>
+                        <div class="program-categories program-more-details-open">
+                        </div>
+                        <div class="featured-image-container">
+                            <div class="program-more-details-open">
+                                <div class="featured-image" style="background-image: url(https://w2.chabad.org/media/images/1058/buWu10582546.jpg)">&nbsp;</div>
+                            </div>
+                        </div>
+                        <div class="program-details">
+                            <h3>Better Together</h3>
+                            Children of all abilities and teens get the opportunity to give back by bringing joy to seniors through fun, engaging inter-generational interactions.
+                            <div class="program-more-details-open program-more-details-button">View more details &raquo;</div>
+                            <div class="program-more-details">
+                                <div class="event-info">
+                                    <p>
+                                        <i class="fas fa-user">&nbsp;</i>
+                                        Age: 3&ndash;4<br />
+                                        <i class="fas fa-dollar-sign">&nbsp;</i>
+                                        Fee: No Charge<br />
+                                        <i class="fas fa-calendar-alt">&nbsp;</i>
+                                        Dates: Sundays - Sept. 15, 22, 29; Oct. 6, 13, 27; Nov. 3, 10, 17, 24; Dec. 1, 8, 15<br />
+                                        <i class="fas fa-clock">&nbsp;</i>
+                                        Time: 1:00&ndash;2:30 p.m.<br />
+                                        <i class="fas fa-map-marker-alt">&nbsp;</i>
+                                        Location: R.H. Myers Apartments<br />
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fine-print">This program is open to participants of all abilities. We recruit teen FriendMakers to match up with children that need extra support and build friendship through exciting enrichment opportunities.</div>
+                        </div>
+                    </li>
+                    <!-- End Program Block -->
+                </ul>
 
-								<div class="event-info">
-									<p>Age: 13 & Up<br />
-										Fee: No Charge<br />
-										Dates: Sundays - Sept. 15, 22, 29; Oct. 6, 13, 27; Nov. 3, 10, 17, 24; Dec. 1, 8, 15<br />
-										Time: 1:00–2:30 p.m.<br />
-										Location: R.H. Myers Apartments<br />
-										<a class="button" href="#" title="Register"> Register </a><br />
-								</div>
-								<a href="#" class="more-details">View more details »</a>
-							</div>
-						</div>
-					</li>
-				</ul>
-
-				<div class="js-no-programs-message no-program-matches">Oops, there are no programs that match your selected category/filters. Try changing the filters or selecting a different category.</div>
-			</div>
-
-			<!--end content-->
-		</div>
-	</div>
-	<!--end container-->
+                <div class="js-no-programs-message no-program-matches">Oops, there are no programs that match your selected category/filters. Try changing the filters or selecting a different category.</div>
+            </div>
+            <!--end content-->
+        </div>
+    </div>
+    <!--end container-->
 </div>
 
 <script src="scripts.js"></script>
