@@ -1,18 +1,41 @@
+// Utility functions
+const generateFilterValue = (text) => {
+    try {
+        if (text == null) return '';
+        if (typeof text !== 'string') text = String(text);
+        const trimmedText = text.trim();
+        if (trimmedText === '') return '';
+        return trimmedText.toLowerCase().replace(/\s+/g, '-');
+    } catch (error) {
+        console.error('Error in generateFilterValue:', error);
+        return ''; // Return empty string instead of re-throwing to prevent breaking the UI
+    }
+};
+
+// Expose utility functions globally
+if (typeof window !== 'undefined') {
+    window.generateFilterValue = generateFilterValue;
+} else if (typeof global !== 'undefined') {
+    global.generateFilterValue = generateFilterValue;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const daysSet = new Set();
     const categoryContainer = document.querySelector('.programs-category-filter .container');
     const templateContainer = document.querySelector('.category-template');
+    if (!templateContainer) {
+        console.error('Template container not found');
+        return;
+    }
     templateContainer.style.display = 'none';
     const categories = Array.from(templateContainer.children);
     const categoriesMap = new Map();
-
-    const generateFilterValue = (text) => text.toLowerCase().replace(/\s/g, '-');
 
     // Cache frequently accessed DOM elements
     const programGroupHeader = document.querySelector('.program-group-header');
 
     // Initialize categoriesMap
-    categories.forEach(category => {
+    categories.forEach((category) => {
         const filterValue = generateFilterValue(category.innerText);
         categoriesMap.set(filterValue, {
             text: category.innerText,
@@ -127,11 +150,22 @@ document.addEventListener('DOMContentLoaded', function () {
     addProgramCategories();
 
     function setActiveCategory(filterLink) {
-        document.querySelectorAll('.js-add-filter').forEach(el => el.classList.remove('active'));
-        filterLink.classList.add('active');
+        if (!filterLink) {
+            return;
+        }
+        document.querySelectorAll('.js-add-filter').forEach(el => {
+            if (el && el.classList) el.classList.remove('active');
+        });
+        if (filterLink.classList) {
+            filterLink.classList.add('active');
+        }
 
-        const categoryName = filterLink.querySelector('span').textContent;
-        document.querySelector('.program-group-header-text').textContent = categoryName;
+        const spanElement = filterLink.querySelector('span');
+        const categoryName = spanElement ? spanElement.textContent : 'Unknown Category';
+        const headerElement = document.querySelector('.program-group-header-text');
+        if (headerElement) {
+            headerElement.textContent = categoryName;
+        }
     }
 
     function toggleProgramDetails(programDetailsOpenLink) {
@@ -157,21 +191,24 @@ document.addEventListener('DOMContentLoaded', function () {
         const audienceFilters = Array.from(activeAudienceFilters).map(filter => filter.value);
         const daysFilters = Array.from(activeDaysFilters).map(filter => filter.value);
 
-        document.querySelectorAll('.program').forEach(program => {
+        let visibleCount = 0;
+        document.querySelectorAll('.program').forEach((program) => {
             const programFilters = JSON.parse(program.dataset.filter.replace(/'/g, '"'));
             const programGroups = programFilters.program_group;
             const programAudiences = programFilters.program_audience;
-            const programDays = JSON.parse(program.dataset.filterDays);
+            const programDays = JSON.parse(program.dataset.filterDays || '[]');
 
             const matchesCategory = activeCategoryValue === 'all-programs' || programGroups.includes(activeCategoryValue);
-            const matchesAudience = audienceFilters.length === 0 || audienceFilters.some(filter => programAudiences.includes(filter));
+            const matchesAudience = audienceFilters.length === 0 || audienceFilters.every(filter => programAudiences.includes(filter));
             const matchesDays = daysFilters.length === 0 || daysFilters.some(filter => programDays.includes(filter));
 
-            program.style.display = matchesCategory && matchesAudience && matchesDays ? 'block' : 'none';
+            const isVisible = matchesCategory && matchesAudience && matchesDays;
+            program.style.display = isVisible ? 'block' : 'none';
+            if (isVisible) visibleCount++;
         });
 
-        const anyVisible = Array.from(document.querySelectorAll('.program')).some(program => program.style.display !== 'none');
-        document.querySelector('.no-program-matches').style.display = anyVisible ? 'none' : 'block';
+        const noResultsElement = document.querySelector('.no-program-matches');
+        noResultsElement.style.display = visibleCount === 0 ? 'block' : 'none';
 
         updateActiveFilters();
     }
