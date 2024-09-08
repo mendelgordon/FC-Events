@@ -1,24 +1,67 @@
+// Utility functions
+const generateFilterValue = (text) => {
+    console.log('Input to generateFilterValue:', text);
+    try {
+        if (text === null || text === undefined) {
+            console.warn('Null or undefined input provided to generateFilterValue');
+            return '';
+        }
+        if (typeof text !== 'string') {
+            console.warn(`Non-string input provided to generateFilterValue. Type: ${typeof text}`);
+            text = String(text);
+        }
+        const trimmedText = text.trim();
+        if (trimmedText === '') {
+            console.warn('Empty string provided to generateFilterValue');
+            return '';
+        }
+        const result = trimmedText.toLowerCase().replace(/\s+/g, '-');
+        console.log('Generated filter value:', result);
+        return result;
+    } catch (error) {
+        console.error('Error in generateFilterValue:', error);
+        return ''; // Return empty string instead of re-throwing to prevent breaking the UI
+    }
+};
+
+// Expose utility functions globally
+if (typeof window !== 'undefined') {
+    window.generateFilterValue = generateFilterValue;
+} else if (typeof global !== 'undefined') {
+    global.generateFilterValue = generateFilterValue;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOMContentLoaded event fired');
     const daysSet = new Set();
     const categoryContainer = document.querySelector('.programs-category-filter .container');
+    console.log('Category container:', categoryContainer);
     const templateContainer = document.querySelector('.category-template');
+    console.log('Template container:', templateContainer);
+    if (!templateContainer) {
+        console.error('Template container not found');
+        return;
+    }
     templateContainer.style.display = 'none';
     const categories = Array.from(templateContainer.children);
+    console.log('Categories:', categories);
     const categoriesMap = new Map();
-
-    const generateFilterValue = (text) => text.toLowerCase().replace(/\s/g, '-');
 
     // Cache frequently accessed DOM elements
     const programGroupHeader = document.querySelector('.program-group-header');
+    console.log('Program group header:', programGroupHeader);
 
     // Initialize categoriesMap
-    categories.forEach(category => {
+    categories.forEach((category, index) => {
+        console.log(`Processing category ${index}:`, category);
         const filterValue = generateFilterValue(category.innerText);
+        console.log(`Generated filter value: ${filterValue}`);
         categoriesMap.set(filterValue, {
             text: category.innerText,
             color: category.style.backgroundColor
         });
     });
+    console.log('Categories map:', categoriesMap);
 
     // Generate filters for .programs-category-filter
     const fragment = document.createDocumentFragment();
@@ -127,11 +170,28 @@ document.addEventListener('DOMContentLoaded', function () {
     addProgramCategories();
 
     function setActiveCategory(filterLink) {
-        document.querySelectorAll('.js-add-filter').forEach(el => el.classList.remove('active'));
-        filterLink.classList.add('active');
+        console.log('setActiveCategory called with:', filterLink);
+        if (!filterLink) {
+            console.error('setActiveCategory: filterLink is null or undefined');
+            return;
+        }
+        document.querySelectorAll('.js-add-filter').forEach(el => {
+            if (el && el.classList) el.classList.remove('active');
+        });
+        if (filterLink.classList) {
+            filterLink.classList.add('active');
+        } else {
+            console.error('setActiveCategory: filterLink.classList is undefined');
+        }
 
-        const categoryName = filterLink.querySelector('span').textContent;
-        document.querySelector('.program-group-header-text').textContent = categoryName;
+        const spanElement = filterLink.querySelector('span');
+        const categoryName = spanElement ? spanElement.textContent : 'Unknown Category';
+        const headerElement = document.querySelector('.program-group-header-text');
+        if (headerElement) {
+            headerElement.textContent = categoryName;
+        } else {
+            console.error('setActiveCategory: .program-group-header-text element not found');
+        }
     }
 
     function toggleProgramDetails(programDetailsOpenLink) {
@@ -149,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function filterPrograms() {
+        console.log('filterPrograms function called');
         const activeCategory = document.querySelector('.js-add-filter.active');
         const activeAudienceFilters = document.querySelectorAll('.program-filter-group[data-filter-group-name="program_audience"] input:checked');
         const activeDaysFilters = document.querySelectorAll('.program-filter-group[data-filter-group-name="program_days"] input:checked');
@@ -157,21 +218,48 @@ document.addEventListener('DOMContentLoaded', function () {
         const audienceFilters = Array.from(activeAudienceFilters).map(filter => filter.value);
         const daysFilters = Array.from(activeDaysFilters).map(filter => filter.value);
 
-        document.querySelectorAll('.program').forEach(program => {
+        console.log('Active filters:', { activeCategoryValue, audienceFilters, daysFilters });
+
+        let visibleCount = 0;
+        document.querySelectorAll('.program').forEach((program, index) => {
+            console.log(`\nProcessing program ${index + 1}:`);
+            console.log('Program HTML:', program.outerHTML);
+
             const programFilters = JSON.parse(program.dataset.filter.replace(/'/g, '"'));
+            console.log('Program filters:', programFilters);
+
             const programGroups = programFilters.program_group;
             const programAudiences = programFilters.program_audience;
-            const programDays = JSON.parse(program.dataset.filterDays);
+            const programDays = JSON.parse(program.dataset.filterDays || '[]');
+            console.log('Program days:', programDays);
 
             const matchesCategory = activeCategoryValue === 'all-programs' || programGroups.includes(activeCategoryValue);
-            const matchesAudience = audienceFilters.length === 0 || audienceFilters.some(filter => programAudiences.includes(filter));
-            const matchesDays = daysFilters.length === 0 || daysFilters.some(filter => programDays.includes(filter));
+            console.log('Matches category:', matchesCategory, '(Active:', activeCategoryValue, ', Program:', programGroups, ')');
 
-            program.style.display = matchesCategory && matchesAudience && matchesDays ? 'block' : 'none';
+            const matchesAudience = audienceFilters.length === 0 || audienceFilters.every(filter => programAudiences.includes(filter));
+            console.log('Matches audience:', matchesAudience, '(Filters:', audienceFilters, ', Program:', programAudiences, ')');
+
+            const matchesDays = daysFilters.length === 0 || daysFilters.some(filter => programDays.includes(filter));
+            console.log('Matches days:', matchesDays, '(Filters:', daysFilters, ', Program:', programDays, ')');
+
+            const isVisible = matchesCategory && matchesAudience && matchesDays;
+            program.style.display = isVisible ? 'block' : 'none';
+            if (isVisible) visibleCount++;
+
+            console.log('Program visibility:', {
+                id: program.id,
+                isVisible,
+                matchesCategory,
+                matchesAudience,
+                matchesDays
+            });
         });
 
-        const anyVisible = Array.from(document.querySelectorAll('.program')).some(program => program.style.display !== 'none');
-        document.querySelector('.no-program-matches').style.display = anyVisible ? 'none' : 'block';
+        console.log('Total visible programs:', visibleCount);
+
+        const noResultsElement = document.querySelector('.no-program-matches');
+        noResultsElement.style.display = visibleCount === 0 ? 'block' : 'none';
+        console.log('No results message visibility:', noResultsElement.style.display);
 
         updateActiveFilters();
     }
