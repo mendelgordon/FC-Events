@@ -152,22 +152,26 @@ document.addEventListener('DOMContentLoaded', function () {
         const activeCategory = document.querySelector('.js-add-filter.active');
         const activeAudienceFilters = document.querySelectorAll('.program-filter-group[data-filter-group-name="program_audience"] input:checked');
         const activeDaysFilters = document.querySelectorAll('.program-filter-group[data-filter-group-name="program_days"] input:checked');
+        const activeCategoryFilters = document.querySelectorAll('.program-filter-group[data-filter-group-name="program_category"] input:checked');
 
         const activeCategoryValue = activeCategory ? activeCategory.dataset.filterValue : 'all-programs';
         const audienceFilters = Array.from(activeAudienceFilters).map(filter => filter.value);
         const daysFilters = Array.from(activeDaysFilters).map(filter => filter.value);
+        const categoryFilters = Array.from(activeCategoryFilters).map(filter => filter.value);
 
         document.querySelectorAll('.program').forEach(program => {
             const programFilters = JSON.parse(program.dataset.filter.replace(/'/g, '"'));
             const programGroups = programFilters.program_group;
             const programAudiences = programFilters.program_audience;
             const programDays = JSON.parse(program.dataset.filterDays);
+            const programCategories = programFilters.program_category;
 
             const matchesCategory = activeCategoryValue === 'all-programs' || programGroups.includes(activeCategoryValue);
             const matchesAudience = audienceFilters.length === 0 || audienceFilters.some(filter => programAudiences.includes(filter));
             const matchesDays = daysFilters.length === 0 || daysFilters.some(filter => programDays.includes(filter));
+            const matchesCategoryFilter = categoryFilters.length === 0 || categoryFilters.some(filter => programCategories.includes(filter));
 
-            program.style.display = matchesCategory && matchesAudience && matchesDays ? 'block' : 'none';
+            program.style.display = matchesCategory && matchesAudience && matchesDays && matchesCategoryFilter ? 'block' : 'none';
         });
 
         const anyVisible = Array.from(document.querySelectorAll('.program')).some(program => program.style.display !== 'none');
