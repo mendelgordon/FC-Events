@@ -815,13 +815,11 @@ Author URI: https://www.clickconsultingservices.com
 	.program-filter .program-filter-group .active-filters-display {
 		cursor: pointer;
 		display: inline-block;
-		padding-left: 4px;
 	}
 
 	.program-filter .program-filter-group .active-filters-display:after {
 		content: "▼";
-		color: #444;
-		margin-left: 5px;
+		color: #69bdb2;
 	}
 
 	.program-filter .program-filter-group label {

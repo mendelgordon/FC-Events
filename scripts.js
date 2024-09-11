@@ -193,10 +193,6 @@ document.addEventListener('DOMContentLoaded', function () {
             <span data-filter-value="${filter.value}" data-filter-name="${filter.dataset.filterName}" class="filter-tag-remove js-filter-tag-remove">x</span>`;
             activeFiltersContainer.appendChild(filterTag);
         });
-
-        const activeFilterCount = activeFilters.length;
-        const filterHeader = document.querySelector('.active-filters-display');
-        filterHeader.textContent = activeFilterCount === 0 ? 'all' : `${activeFilterCount} filter${activeFilterCount > 1 ? 's' : ''}`;
     }
 
     function hideFilterOptionsOnClickOutside(event) {
