@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Replace all &nbsp; with a space in the document
+    document.body.innerHTML = document.body.innerHTML.replace(/&nbsp;/g, ' ');
     const daysSet = new Set();
     const categoryContainer = document.querySelector('.programs-category-filter .container');
     const templateContainer = document.querySelector('.category-template');
