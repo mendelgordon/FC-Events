@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const eventInfoElement = program.querySelector('.event-info');
             let programDays = [];
             if (eventInfoElement) {
-                const daysMatch = eventInfoElement.textContent.match(/(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/g);
+                const daysMatch = eventInfoElement.textContent.match(/(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/g);
                 if (daysMatch) {
                     programDays = daysMatch.map(day => day.trim());
                     programDays.forEach(day => daysSet.add(day));
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update the Days filter options in the DOM
         const dayFilterTemplate = document.createElement('template');
-        const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const orderedDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const sortedDays = Array.from(daysSet).sort((a, b) => orderedDays.indexOf(a) - orderedDays.indexOf(b));
 
         sortedDays.forEach(day => {
