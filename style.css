@@ -394,7 +394,7 @@ Author URI: https://www.clickconsultingservices.com
 		vertical-align: middle;
 	}
 
-	div .event-info .button {
+	.registration-button {
 		background: #F0533F;
 		border-radius: 50px;
 		text-transform: uppercase;
@@ -403,13 +403,13 @@ Author URI: https://www.clickconsultingservices.com
 		color: #fff;
 	}
 
-	div .event-info .button:after {
+	.registration-button:after {
 		content: "»";
 		margin-left: 5px;
 		margin-top: -4px;
 	}
 
-	div .event-info .button:hover {
+	.registration-button:hover {
 		background: #EE3C22;
 		text-decoration: none;
 	}
