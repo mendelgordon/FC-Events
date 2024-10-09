@@ -595,14 +595,8 @@ Author URI: https://www.clickconsultingservices.com
 	.programs-list .featured-image {
 		width: 100%;
 		height: auto;
-		background-color: #ddd;
-		background-size: cover;
-		background-position: center;
-		position: absolute;
-		top: 0;
-		left: 0;
+		display: block;
 		cursor: pointer;
-		background-image: url(https://w2.chabad.org/media/images/1058/buWu10582546.jpg);
 	}
 
 	.programs-list .program-details {
