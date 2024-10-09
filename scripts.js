@@ -111,7 +111,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Update the Days filter options in the DOM
         const dayFilterTemplate = document.createElement('template');
-        daysSet.forEach(day => {
+        const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const sortedDays = Array.from(daysSet).sort((a, b) => orderedDays.indexOf(a) - orderedDays.indexOf(b));
+
+        sortedDays.forEach(day => {
             dayFilterTemplate.innerHTML = `
                 <label>
                     <input type="checkbox" class="js-add-remove-filter" data-filter-name="program_days"
