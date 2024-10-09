@@ -408,6 +408,7 @@ html body {
 	margin-top: 20px;
 	display: inline-block;
 	color: #fff;
+	transition: all 0.3s ease-out;
 }
 
 #programFilterResponse .registration-button:after {
